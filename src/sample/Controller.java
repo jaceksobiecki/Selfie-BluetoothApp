@@ -57,4 +57,8 @@ public class Controller implements Initializable{
             }
         });
     }
+
+    public void getData() throws IOException {
+        HC05.getValueOfDetector();
+    }
 }
