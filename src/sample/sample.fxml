@@ -36,5 +36,6 @@
         <Button layoutX="199.0" layoutY="249.0" mnemonicParsing="false" onAction="#connect" text="Connect" />
         <Label layoutX="53.0" layoutY="35.0" text="Speed:" />
         <Label layoutX="206.0" layoutY="35.0" text="Steering:" />
+      <Button fx:id="getter" layoutX="317.0" layoutY="63.0" mnemonicParsing="false" onAction="#getData" text="Get Data" />
     </children>
 </AnchorPane>
