@@ -34,17 +34,33 @@ public class HC05 {
         streamConnection.close();
     }
     public static void getValueOfDetector() throws IOException {
+
+        //wielokrotne pobieranie danych
         for(int i=0;;i++) {
+
+            //czas rozpoczecia pobierania jednej wartosci
             long time1= System.currentTimeMillis();
+
+            //zczytywanie danych z czujnika, zamiana na int
             BufferedReader bReader = new BufferedReader(new InputStreamReader(is));
             String read = bReader.readLine();
             int reade = Integer.valueOf(read);
             System.out.println(reade);
-            int tablica[]=new int[100];
-            tablica[i]=reade;
+
+            //zapisanie wartosci w tablicy -zestawic w tabeli
+            int tablica1[]=new int[100];
+            tablica1[i]=reade;
+
+            //czas zakonczenia pobierania jednej wartosci
             long time2=System.currentTimeMillis();
+
+            //roznica czasow - czas jednego pobrania
             time3=time2-time1;
             System.out.println(time3);
+
+            //zapisanie czasu w tablicy -zestawic w tabeli
+            long tablica2[]=new long[100];
+            tablica2[i]=time3;
             time3+=time3;
         }
     }
