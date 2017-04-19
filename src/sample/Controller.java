@@ -16,29 +16,36 @@ public class Controller implements Initializable{
     @FXML
     Slider slider;
 
+    HC05 hc05 = new HC05();
+
     @FXML
     private void stop(ActionEvent event) throws Exception {
-        HC05.send(250);
+        hc05.send(250);
     }
     @FXML
     private void up(ActionEvent event) throws Exception {
-        HC05.send(251);
+        hc05.send(251);
     }
     @FXML
     private void down(ActionEvent event) throws Exception {
-        HC05.send(252);
+        hc05.send(252);
     }
     @FXML
     private void left(ActionEvent event) throws Exception {
-        HC05.send(253);
+        hc05.send(253);
     }
     @FXML
     private void right(ActionEvent event) throws Exception {
-        HC05.send(254);
+        hc05.send(254);
     }
     @FXML
     private void connect(ActionEvent event) throws IOException {
-        new HC05().go();
+        hc05.go();
+    }
+    @FXML
+    public void getData() throws IOException {
+        Thread thread1 = new Thread(hc05);
+        thread1.start();
     }
 
     @Override
@@ -50,7 +57,7 @@ public class Controller implements Initializable{
                                 Number oldValue, Number newValue) {
                 speed = (double)newValue;
                 try {
-                    HC05.send((int)speed);
+                    hc05.send((int)speed);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
@@ -58,7 +65,5 @@ public class Controller implements Initializable{
         });
     }
 
-    public void getData() throws IOException {
-        HC05.getValueOfDetector();
-    }
+
 }
