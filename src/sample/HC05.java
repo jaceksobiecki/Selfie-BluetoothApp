@@ -17,8 +17,11 @@ public class HC05 implements Runnable {
     private static long tablica2[] = new long[100];
 
     //set your hc05Url
-    private static String hc05Url = "btspp://301412260760:1;authenticate=false;encrypt=false;master=false";
-
+    private static String hc05Url = "btspp://201611226383:1;authenticate=false;encrypt=false;master=false";
+    //bt Jacek
+    //"btspp://301412260760:1;authenticate=false;encrypt=false;master=false";
+    //bt Piotrek
+    //"btspp://201611226383:1;authenticate=false;encrypt=false;master=false";
 
     public void go() throws IOException {
         streamConnection = (StreamConnection) Connector.open(hc05Url);
