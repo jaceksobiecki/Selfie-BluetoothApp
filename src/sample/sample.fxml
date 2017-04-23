@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
+
 <AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <children>
         <Button fx:id="up" layoutY="80.0" mnemonicParsing="false" onAction="#up" prefHeight="40.0" prefWidth="40.0" text="up" AnchorPane.leftAnchor="209.0">
@@ -37,12 +41,12 @@
         <Label layoutX="53.0" layoutY="35.0" text="Speed:" />
         <Label layoutX="206.0" layoutY="35.0" text="Steering:" />
       <Button fx:id="getter" layoutX="362.0" layoutY="67.0" mnemonicParsing="false" onAction="#getData" text="Get Data" />
-      <AreaChart fx:id="chart" animated="false" layoutX="12.0" layoutY="287.0" prefHeight="308.0" prefWidth="466.0" title="Data">
+      <AreaChart fx:id="chart" animated="false" createSymbols="false" layoutX="12.0" layoutY="287.0" prefHeight="308.0" prefWidth="466.0" title="Data">
         <xAxis>
-          <CategoryAxis label="time" side="BOTTOM" fx:id="x" />
+          <CategoryAxis animated="false" label="time" side="BOTTOM" fx:id="x" />
         </xAxis>
         <yAxis>
-          <NumberAxis fx:id="y" label="data" side="LEFT" />
+          <NumberAxis fx:id="y" animated="false" autoRanging="false" label="data" side="LEFT" upperBound="200.0" />
         </yAxis>
       </AreaChart>
       <Button fx:id="show" layoutX="342.0" layoutY="188.0" mnemonicParsing="false" onAction="#showTestChart" text="show test chart" />

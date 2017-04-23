@@ -13,7 +13,7 @@ public class HC05{
     private static StreamConnection streamConnection;
     private static InputStream is;
     private static int i=0;
-    private static int data[] = new int[100];
+    private static int data[] = new int[1000];
     private int a =-1;
 
     //set your hc05Url

@@ -29,6 +29,7 @@ public class Controller implements Initializable {
     private CategoryAxis x;
     @FXML
     private NumberAxis y;
+
     private HC05 hc05 = new HC05();
 
     @FXML
@@ -97,6 +98,9 @@ public class Controller implements Initializable {
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 Platform.runLater(() -> {
                     series.getData().add(new XYChart.Data(timeSeconds, hc05.getData()));
+                    if(series.getData().size() > 10){
+                        series.getData().remove(0,1);
+                    }
                 });
                 try {
                     Thread.sleep(1000);
@@ -123,6 +127,9 @@ public class Controller implements Initializable {
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 Platform.runLater(() -> {
                     series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData()));
+                    if(series.getData().size() > 10){
+                        series.getData().remove(0,1);
+                    }
                 });
                 try {
                     Thread.sleep(1000);
