@@ -15,6 +15,7 @@ public class HC05{
     private static int i=0;
     private static int data[] = new int[1000];
     private int a =-1;
+    private static int x = 1;
 
     //set your hc05Url
 
@@ -40,13 +41,15 @@ public class HC05{
         os.write(a);
     }
 
-    public void close() throws IOException {
+    public static void close() throws IOException {
+        x = 2;
         os.close();
         is.close();
         streamConnection.close();
     }
 
     public void getValueOfDetector() throws IOException {
+
 
         //zczytywanie danych z czujnika, zamiana na int
         BufferedReader bReader = new BufferedReader(new InputStreamReader(is));
