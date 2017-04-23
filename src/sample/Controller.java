@@ -90,6 +90,11 @@ public class Controller implements Initializable {
         @Override
         public void run() {
             while (true) {
+                try {
+                    hc05.getValueOfDetector();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Platform.runLater(() -> {
                     series.getData().add(new XYChart.Data(hc05.getTimeS(), hc05.getData()));
                 });
