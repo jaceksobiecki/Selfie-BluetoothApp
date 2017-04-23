@@ -37,7 +37,6 @@
         <Label layoutX="53.0" layoutY="35.0" text="Speed:" />
         <Label layoutX="206.0" layoutY="35.0" text="Steering:" />
       <Button fx:id="getter" layoutX="362.0" layoutY="67.0" mnemonicParsing="false" onAction="#getData" text="Get Data" />
-      <Button fx:id="chartBtn" layoutX="358.0" layoutY="128.0" mnemonicParsing="false" onAction="#showChart" text="show data" />
       <AreaChart fx:id="chart" animated="false" layoutX="12.0" layoutY="287.0" prefHeight="308.0" prefWidth="466.0" title="Data">
         <xAxis>
           <CategoryAxis label="time" side="BOTTOM" fx:id="x" />

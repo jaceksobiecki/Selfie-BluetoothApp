@@ -15,6 +15,7 @@ import javafx.scene.control.Slider;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 public class Controller implements Initializable {
 
@@ -59,16 +60,9 @@ public class Controller implements Initializable {
     private void connect(ActionEvent event) throws IOException {
         hc05.go();
     }
-
-    @FXML
-    public void getData() throws IOException {
-        Thread thread1 = new Thread(hc05);
-        thread1.start();
-    }
-
+    //Test
     @FXML
     public void showTestChart() {
-        hc05.drawTestData();
         series = new XYChart.Series();
         chart.getData().addAll(series);
 
@@ -77,7 +71,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void showChart(){
+    public void getData(){
         series = new XYChart.Series();
         chart.getData().addAll(series);
 
@@ -86,40 +80,57 @@ public class Controller implements Initializable {
     }
 
     public class ChartThread implements Runnable{
+        long time = 0;
+        long timeSeconds;
 
         @Override
         public void run() {
+            long currentTime;
+            long endingTime;
             while (true) {
+                currentTime = System.currentTimeMillis();
                 try {
                     hc05.getValueOfDetector();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 Platform.runLater(() -> {
-                    series.getData().add(new XYChart.Data(hc05.getTimeS(), hc05.getData()));
+                    series.getData().add(new XYChart.Data(timeSeconds, hc05.getData()));
                 });
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                endingTime = System.currentTimeMillis();
+                time += endingTime - currentTime;
             }
         }
     }
-
+    //Test
     public class TestChartThread implements Runnable {
+        long time = 0;
+        long timeSeconds;
 
         @Override
         public void run() {
+            long currentTime;
+            long endingTime;
             while (true) {
+                currentTime = System.currentTimeMillis();
+                hc05.drawTestData();
+                timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 Platform.runLater(() -> {
-                    series.getData().add(new XYChart.Data(hc05.getTimeS(), hc05.getData()));
+                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData()));
                 });
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                endingTime = System.currentTimeMillis();
+                time += endingTime - currentTime;
             }
         }
     }
