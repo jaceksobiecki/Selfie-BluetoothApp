@@ -1,8 +1,6 @@
 package sample;
 
 import javafx.application.Platform;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -14,14 +12,12 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.TableColumn;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
@@ -40,16 +36,13 @@ public class Controller implements Initializable {
     @FXML
     public TableView table;
     @FXML
-    public TableColumn<Detector, Integer> timeof;
+    public TableColumn<Detector, String> timeof;
     @FXML
-    public TableColumn<Detector, Integer> valueof;
-    ObservableList<Detector> data;
+    public TableColumn<Detector, String> valueof;
 
     private HC05 hc05 = new HC05();
+    ObservableList<Detector> data;
 
-    public Controller() {
-        data = null;
-    }
 
     @FXML
     private void stop(ActionEvent event) throws Exception {
@@ -83,10 +76,7 @@ public class Controller implements Initializable {
     //Test
     @FXML
     public void showTestChart() {
-        series = new XYChart.Series();
-        chart.getData().addAll(series);
 
-        table.setItems(data);
         series = new XYChart.Series();
         chart.getData().addAll(series);
 
@@ -95,15 +85,25 @@ public class Controller implements Initializable {
         thread2.start();
     }
 
+    public void showTestTable(){
+        Thread thread3 = new Thread(new TestTableThread());
+        thread3.start();
+    }
+
     @FXML
     public void getData(){
 
-        table.setItems(data);
         series = new XYChart.Series();
         chart.getData().addAll(series);
 
         Thread thread2 = new Thread(new ChartThread());
         thread2.start();
+    }
+
+    public void getInfo(){
+
+        Thread thread3 = new Thread(new TableThread());
+        thread3.start();
     }
 
     public class ChartThread implements Runnable{
@@ -125,13 +125,59 @@ public class Controller implements Initializable {
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
 
                 Platform.runLater(() -> {
-                    data = FXCollections.observableArrayList(
-                            new Detector(timeSeconds1, hc05.getData()));
+
                     series.getData().add(new XYChart.Data(timeSeconds, hc05.getData()));
 
                     if(series.getData().size() > 10){
                         series.getData().remove(0,1);
                     }
+                });
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                endingTime = System.currentTimeMillis();
+                time += endingTime - currentTime;
+            }
+        }
+    }
+
+    public class TableThread implements Runnable{
+        long time = 0;
+        long timeSeconds;
+        int timeSeconds1=(int)timeSeconds;
+
+        @Override
+        public void run() {
+            long currentTime;
+            long endingTime;
+
+            String a=String.valueOf(hc05.getDatat());
+            String b=String.valueOf(timeSeconds);
+            data = FXCollections.observableArrayList(
+                    new Detector(a,b),
+                    new Detector(a,b)
+            );
+            while (true) {
+                currentTime = System.currentTimeMillis();
+                try {
+                    hc05.getValueOfDetector();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
+
+                Platform.runLater(() -> {
+                    table.itemsProperty().setValue(data);
+
+                    valueof.setCellValueFactory(
+                            new PropertyValueFactory<Detector, String>("nazwa")
+                    );
+
+                    timeof.setCellValueFactory(
+                            new PropertyValueFactory<Detector, String>("srednia")
+                    );
                 });
                 try {
                     Thread.sleep(1000);
@@ -159,12 +205,50 @@ public class Controller implements Initializable {
 
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 Platform.runLater(() -> {
-                    data = FXCollections.observableArrayList(
-                            new Detector(timeSeconds1, hc05.getData()));
                     series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData()));
                     if(series.getData().size() > 10){
                         series.getData().remove(0,1);
                     }
+                });
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                endingTime = System.currentTimeMillis();
+                time += endingTime - currentTime;
+            }
+        }
+    }
+
+    public class TestTableThread implements Runnable {
+        long time=0;
+        long timeSeconds;
+
+        @Override
+        public void run() {
+            long currentTime;
+            long endingTime;
+            while (true) {
+                currentTime = System.currentTimeMillis();
+                hc05.drawTestData();
+                String a=String.valueOf(hc05.getDatat());
+                String b=String.valueOf(timeSeconds);
+                    data = FXCollections.observableArrayList(
+                         new Detector(a,b),
+                         new Detector(a,b)
+                );
+                timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
+                Platform.runLater(() -> {
+                            table.itemsProperty().setValue(data);
+
+                            valueof.setCellValueFactory(
+                                    new PropertyValueFactory<Detector, String>("value")
+                            );
+
+                            timeof.setCellValueFactory(
+                                    new PropertyValueFactory<Detector, String>("time")
+                            );
                 });
                 try {
                     Thread.sleep(1000);
@@ -192,16 +276,5 @@ public class Controller implements Initializable {
             }
         });
     }
-
-    public static class Detector {
-        public final SimpleIntegerProperty valueofd;
-        public final SimpleIntegerProperty timeofd;
-
-        public Detector(int vod, int tod) {
-            this.valueofd = new SimpleIntegerProperty(vod);
-            this.timeofd = new SimpleIntegerProperty(tod);
-        }
-    }
-
 
 }

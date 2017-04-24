@@ -29,6 +29,11 @@ public class HC05{
         return data[a];
     }
 
+    public int getDatat(){
+        a++;
+        return data[a];
+    }
+
     public void go() throws IOException {
         streamConnection = (StreamConnection) Connector.open(hc05Url);
         os = streamConnection.openOutputStream();
