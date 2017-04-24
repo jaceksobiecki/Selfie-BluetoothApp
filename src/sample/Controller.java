@@ -86,6 +86,11 @@ public class Controller implements Initializable {
         series = new XYChart.Series();
         chart.getData().addAll(series);
 
+        table.setItems(data);
+        series = new XYChart.Series();
+        chart.getData().addAll(series);
+
+
         Thread thread2 = new Thread(new TestChartThread());
         thread2.start();
     }
@@ -111,8 +116,6 @@ public class Controller implements Initializable {
             long currentTime;
             long endingTime;
             while (true) {
-                data = FXCollections.observableArrayList(
-                        new Detector(timeSeconds1, hc05.getData()));
                 currentTime = System.currentTimeMillis();
                 try {
                     hc05.getValueOfDetector();
@@ -122,7 +125,8 @@ public class Controller implements Initializable {
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
 
                 Platform.runLater(() -> {
-
+                    data = FXCollections.observableArrayList(
+                            new Detector(timeSeconds1, hc05.getData()));
                     series.getData().add(new XYChart.Data(timeSeconds, hc05.getData()));
 
                     if(series.getData().size() > 10){
@@ -141,12 +145,12 @@ public class Controller implements Initializable {
     }
     //Test
     public class TestChartThread implements Runnable {
-
+        long time=0;
         long timeSeconds;
+        int timeSeconds1=(int)timeSeconds;
 
         @Override
         public void run() {
-            long time=0;
             long currentTime;
             long endingTime;
             while (true) {
@@ -155,6 +159,8 @@ public class Controller implements Initializable {
 
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 Platform.runLater(() -> {
+                    data = FXCollections.observableArrayList(
+                            new Detector(timeSeconds1, hc05.getData()));
                     series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData()));
                     if(series.getData().size() > 10){
                         series.getData().remove(0,1);
