@@ -53,9 +53,9 @@
       <Button fx:id="show" layoutX="342.0" layoutY="188.0" mnemonicParsing="false" onAction="#showTestChart" text="show test chart" />
       <TableView fx:id="table" layoutX="495.0" layoutY="69.0" prefHeight="200.0" prefWidth="200.0">
         <columns>
-          <TableColumn fx:id="valueof" prefWidth="75.0" text="C1" />
-          <TableColumn fx:id="timeof" prefWidth="75.0" text="C2" />
+          <TableColumn fx:id="valueof" prefWidth="100.0" text="Value" />
+          <TableColumn fx:id="timeof" prefWidth="100.0" text="Time" />
         </columns>
       </TableView>
-    </children>
+          </children>
 </AnchorPane>

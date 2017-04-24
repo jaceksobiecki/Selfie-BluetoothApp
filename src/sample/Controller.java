@@ -111,6 +111,8 @@ public class Controller implements Initializable {
             long currentTime;
             long endingTime;
             while (true) {
+                data = FXCollections.observableArrayList(
+                        new Detector(timeSeconds1, hc05.getData()));
                 currentTime = System.currentTimeMillis();
                 try {
                     hc05.getValueOfDetector();
@@ -120,8 +122,7 @@ public class Controller implements Initializable {
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
 
                 Platform.runLater(() -> {
-                    data = FXCollections.observableArrayList(
-                        new Detector(timeSeconds1, hc05.getData()));
+
                     series.getData().add(new XYChart.Data(timeSeconds, hc05.getData()));
 
                     if(series.getData().size() > 10){
@@ -194,21 +195,7 @@ public class Controller implements Initializable {
             this.valueofd = new SimpleIntegerProperty(vod);
             this.timeofd = new SimpleIntegerProperty(tod);
         }
-
-        public int getValueOfD() {
-            return valueofd.get();
-        }
-        public void setValueofd(int vod) {
-            valueofd.set(vod);
-        }
-
-        public int getTimeOfD() {
-            return timeofd.get();
-        }
-        public void setTimeOfD(int tod) {
-            timeofd.set(tod);
-        }
-
     }
+
 
 }
