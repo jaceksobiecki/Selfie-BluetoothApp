@@ -22,7 +22,7 @@ public class HC05{
     //Bt Piotrek
     //private static String hc05Url = "btspp://201611226383:1;authenticate=false;encrypt=false;master=false";
     //bt Jacek
-    private static String hc05Url = "btspp://301412260760:1;authenticate=false;encrypt=false;master=false";
+    private static String hc05Url = "btspp://201611226383:1;authenticate=false;encrypt=false;master=false";
 
     public int getData(){
         a++;

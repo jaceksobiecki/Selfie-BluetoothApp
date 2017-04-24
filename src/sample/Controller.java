@@ -1,8 +1,12 @@
 package sample;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,6 +15,10 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TableColumn;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,18 +27,29 @@ import java.util.concurrent.TimeUnit;
 
 public class Controller implements Initializable {
 
-    private static double speed;
+    public static double speed;
     @FXML
-    public AreaChart<?, ?> chart;
-    private XYChart.Series series;
+    public AreaChart<?,?> chart;
+    public XYChart.Series series;
     @FXML
-    private Slider slider;
+    public Slider slider;
     @FXML
-    private CategoryAxis x;
+    public CategoryAxis x;
     @FXML
-    private NumberAxis y;
+    public NumberAxis y;
+    @FXML
+    public TableView table;
+    @FXML
+    public TableColumn<Detector, Integer> timeof;
+    @FXML
+    public TableColumn<Detector, Integer> valueof;
+    ObservableList<Detector> data;
 
     private HC05 hc05 = new HC05();
+
+    public Controller() {
+        data = null;
+    }
 
     @FXML
     private void stop(ActionEvent event) throws Exception {
@@ -73,6 +92,8 @@ public class Controller implements Initializable {
 
     @FXML
     public void getData(){
+
+        table.setItems(data);
         series = new XYChart.Series();
         chart.getData().addAll(series);
 
@@ -83,6 +104,7 @@ public class Controller implements Initializable {
     public class ChartThread implements Runnable{
         long time = 0;
         long timeSeconds;
+        int timeSeconds1=(int)timeSeconds;
 
         @Override
         public void run() {
@@ -96,8 +118,12 @@ public class Controller implements Initializable {
                     e.printStackTrace();
                 }
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
+
                 Platform.runLater(() -> {
+                    data = FXCollections.observableArrayList(
+                        new Detector(timeSeconds1, hc05.getData()));
                     series.getData().add(new XYChart.Data(timeSeconds, hc05.getData()));
+
                     if(series.getData().size() > 10){
                         series.getData().remove(0,1);
                     }
@@ -114,16 +140,18 @@ public class Controller implements Initializable {
     }
     //Test
     public class TestChartThread implements Runnable {
-        long time = 0;
+
         long timeSeconds;
 
         @Override
         public void run() {
+            long time=0;
             long currentTime;
             long endingTime;
             while (true) {
                 currentTime = System.currentTimeMillis();
                 hc05.drawTestData();
+
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 Platform.runLater(() -> {
                     series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData()));
@@ -158,5 +186,29 @@ public class Controller implements Initializable {
         });
     }
 
+    public static class Detector {
+        public final SimpleIntegerProperty valueofd;
+        public final SimpleIntegerProperty timeofd;
+
+        public Detector(int vod, int tod) {
+            this.valueofd = new SimpleIntegerProperty(vod);
+            this.timeofd = new SimpleIntegerProperty(tod);
+        }
+
+        public int getValueOfD() {
+            return valueofd.get();
+        }
+        public void setValueofd(int vod) {
+            valueofd.set(vod);
+        }
+
+        public int getTimeOfD() {
+            return timeofd.get();
+        }
+        public void setTimeOfD(int tod) {
+            timeofd.set(tod);
+        }
+
+    }
 
 }
