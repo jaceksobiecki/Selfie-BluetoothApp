@@ -22,7 +22,7 @@ public class Controller implements Initializable {
 
     public static double speed;
     @FXML
-    public AreaChart<?,?> chart;
+    public AreaChart<?, ?> chart;
     public XYChart.Series series;
     @FXML
     public Slider slider;
@@ -74,6 +74,7 @@ public class Controller implements Initializable {
     private void connect(ActionEvent event) throws IOException {
         hc05.go();
     }
+
     //Test
     @FXML
     public void showTestChart() {
@@ -85,26 +86,25 @@ public class Controller implements Initializable {
         Thread thread2 = new Thread(new TestChartThread());
         thread2.start();
     }
-
-    public void showTestTable() {
+    @FXML
+    public void showTable() {
 
         PrintWriter zapis = null;
         try {
-            zapis = new PrintWriter("C:\\Users\\Piotr Szubert\\Desktop\\TEST.txt");
+            zapis = new PrintWriter("TEST.txt");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        int time4=0;
-        for(String y : a1){
-            if(y !=null){
+        int time4 = 0;
+        for (String y : a1) {
+            if (y != null) {
                 zapis.println(y + "\t" + time4++);
             }
         }
         zapis.close();
 
         ArrayList<String> list = new ArrayList<String>();
-        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Piotr Szubert\\Desktop\\TEST.txt")))
-        {
+        try (BufferedReader br = new BufferedReader(new FileReader("TEST.txt"))) {
 
             String value;
 
@@ -117,9 +117,9 @@ public class Controller implements Initializable {
         }
 
         ArrayList<Detector> lista = new ArrayList<Detector>();
-        for(String l : list) {
+        for (String l : list) {
             String[] tab = l.split("\t");
-            if (tab.length > 1){
+            if (tab.length > 1) {
                 lista.add(new Detector(tab[0], tab[1]));
             }
         }
@@ -134,12 +134,11 @@ public class Controller implements Initializable {
         );
         table.itemsProperty().setValue(dane);
 
-        Thread thread3 = new Thread(new TestTableThread());
-        thread3.start();
+
     }
 
     @FXML
-    public void getData(){
+    public void getData() {
 
         series = new XYChart.Series();
         chart.getData().addAll(series);
@@ -148,163 +147,9 @@ public class Controller implements Initializable {
         thread2.start();
     }
 
-    public void getInfo(){
-        PrintWriter zapis = null;
-        try {
-            zapis = new PrintWriter("C:\\Users\\Piotr Szubert\\Desktop\\TEST.txt");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
 
-        for(String y : a1){
-            zapis.println(y +"\t"+ 0.5);
-        }
-        zapis.close();
-
-        ArrayList<String> list = new ArrayList<String>();
-        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Piotr Szubert\\Desktop\\TEST.txt")))
-        {
-
-            String value;
-
-            while ((value = br.readLine()) != null) {
-                list.add(value);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        ArrayList<Detector> lista = new ArrayList<Detector>();
-        for(String l : list) {
-            String[] tab = l.split("\t");
-            if (tab.length > 1){
-                lista.add(new Detector(tab[0], tab[1]));
-            }
-        }
-        ObservableList<Detector> dane = FXCollections.observableArrayList(lista);
-
-        valueof.setCellValueFactory(
-                new PropertyValueFactory<Detector, String>("value")
-        );
-
-        timeof.setCellValueFactory(
-                new PropertyValueFactory<Detector, String>("time")
-        );
-        table.itemsProperty().setValue(dane);
-
-        Thread thread3 = new Thread(new TableThread());
-        thread3.start();
-    }
-
-    public class ChartThread implements Runnable{
+    public class ChartThread implements Runnable {
         long time = 0;
-        long timeSeconds;
-        int timeSeconds1=(int)timeSeconds;
-
-        @Override
-        public void run() {
-            long currentTime;
-            long endingTime;
-            while (true) {
-                currentTime = System.currentTimeMillis();
-                try {
-                    hc05.getValueOfDetector();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
-
-                Platform.runLater(() -> {
-
-                    series.getData().add(new XYChart.Data(timeSeconds, hc05.getData()));
-
-                    if(series.getData().size() > 10){
-                        series.getData().remove(0,1);
-                    }
-                });
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                endingTime = System.currentTimeMillis();
-                time += endingTime - currentTime;
-            }
-        }
-    }
-
-    public class TableThread implements Runnable{
-        long time = 0;
-        long timeSeconds;
-        int i=0;
-
-        @Override
-        public void run() {
-            long currentTime;
-            long endingTime;
-
-            while (true) {
-                currentTime = System.currentTimeMillis();
-                try {
-                    hc05.getValueOfDetector();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
-
-                Platform.runLater(() -> {
-                    a1[i] = String.valueOf(hc05.getData());
-                    i++;
-                });
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                endingTime = System.currentTimeMillis();
-                time += endingTime - currentTime;
-            }
-        }
-    }
-    //Test
-    public class TestChartThread implements Runnable {
-        long time=0;
-        long timeSeconds;
-        int i=0;
-
-        @Override
-        public void run() {
-
-            long currentTime;
-            long endingTime;
-            while (true) {
-                currentTime = System.currentTimeMillis();
-                hc05.drawTestData();
-                timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
-
-                Platform.runLater(() -> {
-                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData()));
-                    if(series.getData().size() > 10){
-                        series.getData().remove(0,1);
-                    }
-                    a1[i] = String.valueOf(hc05.getData());
-                    i++;
-                });
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                endingTime = System.currentTimeMillis();
-
-                time += endingTime - currentTime;
-            }
-        }
-    }
-
-    public class TestTableThread implements Runnable {
-        long time=0;
         long timeSeconds;
         int i =0;
 
@@ -312,18 +157,25 @@ public class Controller implements Initializable {
         public void run() {
             long currentTime;
             long endingTime;
-
             while (true) {
-
-                    currentTime = System.currentTimeMillis();
-                hc05.drawTestData();
-
-
+                currentTime = System.currentTimeMillis();
+                try {
+                    hc05.getValueOfDetector();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
+
                 Platform.runLater(() -> {
-                    a1[i]=String.valueOf(hc05.getData());
+
+                    series.getData().add(new XYChart.Data(timeSeconds, hc05.getData(i)));
+
+                    if (series.getData().size() > 10) {
+                        series.getData().remove(0, 1);
+                    }
+                    a1[i] = String.valueOf(hc05.getData(i));
                     i++;
-                    });
+                });
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -334,6 +186,45 @@ public class Controller implements Initializable {
             }
         }
     }
+
+    //Test
+    public class TestChartThread implements Runnable {
+        long time = 0;
+        long timeSeconds;
+        int i = 0;
+
+        @Override
+        public void run() {
+
+            long currentTime;
+            long endingTime;
+
+            while (true) {
+                currentTime = System.currentTimeMillis();
+                hc05.drawTestData();
+                timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
+
+                Platform.runLater(() -> {
+                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData(i)));
+                    if (series.getData().size() > 10) {
+                        series.getData().remove(0, 1);
+                    }
+                    a1[i] = String.valueOf(hc05.getData(i));
+                    i++;
+                });
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                endingTime = System.currentTimeMillis();
+
+                time += endingTime - currentTime;
+            }
+        }
+    }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -11,7 +16,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <children>
         <Button fx:id="up" layoutY="80.0" mnemonicParsing="false" onAction="#up" prefHeight="40.0" prefWidth="40.0" text="up" AnchorPane.leftAnchor="209.0">
             <font>
@@ -41,23 +46,24 @@
         <Button layoutX="194.0" layoutY="233.0" mnemonicParsing="false" onAction="#connect" text="Connect" />
         <Label layoutX="53.0" layoutY="35.0" text="Speed:" />
         <Label layoutX="206.0" layoutY="35.0" text="Steering:" />
-      <Button fx:id="getter" layoutX="362.0" layoutY="67.0" mnemonicParsing="false" onAction="#getData" text="Get Data" />
-      <AreaChart fx:id="chart" animated="false" createSymbols="false" layoutX="12.0" layoutY="287.0" prefHeight="308.0" prefWidth="466.0" title="Data">
+      <Button fx:id="getter" layoutX="364.0" layoutY="87.0" mnemonicParsing="false" onAction="#getData" text="Get Data" />
+      <AreaChart fx:id="chart" animated="false" createSymbols="false" layoutX="12.0" layoutY="287.0" prefHeight="308.0" prefWidth="707.0" title="Data">
         <xAxis>
-          <CategoryAxis animated="false" label="time[sec]" side="BOTTOM" fx:id="x" />
+          <CategoryAxis animated="false" endMargin="0.0" label="time[sec]" pickOnBounds="false" side="BOTTOM" startMargin="0.0" fx:id="x" />
         </xAxis>
         <yAxis>
           <NumberAxis fx:id="y" animated="false" autoRanging="false" label="data" side="LEFT" upperBound="200.0" />
         </yAxis>
       </AreaChart>
-      <Button fx:id="show" layoutX="308.0" layoutY="183.0" mnemonicParsing="false" onAction="#showTestChart" text="Set Data for Chart and Table" />
-      <TableView fx:id="table" layoutX="495.0" layoutY="69.0" prefHeight="479.0" prefWidth="200.0">
+      <Button fx:id="show" layoutX="341.0" layoutY="144.0" mnemonicParsing="false" onAction="#showTestChart" prefHeight="27.0" prefWidth="120.0" text="Test Chart" />
+      <TableView fx:id="table" layoutX="495.0" layoutY="30.0" prefHeight="281.0" prefWidth="207.0">
         <columns>
           <TableColumn fx:id="valueof" prefWidth="100.0" text="Value" />
           <TableColumn fx:id="timeof" prefWidth="100.0" text="Time" />
         </columns>
       </TableView>
-      <Button fx:id="butt" layoutX="555.0" layoutY="31.0" mnemonicParsing="false" onAction="#getInfo" text="Table's Data" />
-      <Button fx:id="tb" layoutX="342.0" layoutY="221.0" mnemonicParsing="false" onAction="#showTestTable" text="show test table" />
+      <Button fx:id="tb" layoutX="356.0" layoutY="206.0" mnemonicParsing="false" onAction="#showTable" text="show Table" />
+      <Separator layoutX="134.0" layoutY="57.0" orientation="VERTICAL" prefHeight="200.0" />
+      <Separator layoutX="314.0" layoutY="57.0" orientation="VERTICAL" prefHeight="200.0" />
           </children>
 </AnchorPane>

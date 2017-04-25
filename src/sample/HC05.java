@@ -24,6 +24,9 @@ public class HC05{
     //bt Jacek
     private static String hc05Url = "btspp://201611226383:1;authenticate=false;encrypt=false;master=false";
 
+    public int getData(int i){
+        return this.data[i];
+    }
     public int getData(){
         a++;
         return data[a];
