@@ -38,7 +38,8 @@ public class Controller implements Initializable {
     public TableColumn<Detector, String> valueof;
 
     private HC05 hc05 = new HC05();
-    String[] a1 = new String[300];
+
+    String[] a1 = new String[3000];
 
     public Controller() throws IOException {
     }
@@ -93,9 +94,11 @@ public class Controller implements Initializable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
+        int time4=0;
         for(String y : a1){
-            zapis.println(y +"\t"+ 0.5);
+            if(y !=null){
+                zapis.println(y + "\t" + time4++);
+            }
         }
         zapis.close();
 
@@ -269,8 +272,10 @@ public class Controller implements Initializable {
         long time=0;
         long timeSeconds;
         int i=0;
+
         @Override
         public void run() {
+
             long currentTime;
             long endingTime;
             while (true) {

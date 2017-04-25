@@ -50,14 +50,14 @@
           <NumberAxis fx:id="y" animated="false" autoRanging="false" label="data" side="LEFT" upperBound="200.0" />
         </yAxis>
       </AreaChart>
-      <Button fx:id="show" layoutX="342.0" layoutY="188.0" mnemonicParsing="false" onAction="#showTestChart" text="show test chart" />
-      <TableView fx:id="table" layoutX="495.0" layoutY="69.0" prefHeight="200.0" prefWidth="200.0">
+      <Button fx:id="show" layoutX="308.0" layoutY="183.0" mnemonicParsing="false" onAction="#showTestChart" text="Set Data for Chart and Table" />
+      <TableView fx:id="table" layoutX="495.0" layoutY="69.0" prefHeight="479.0" prefWidth="200.0">
         <columns>
           <TableColumn fx:id="valueof" prefWidth="100.0" text="Value" />
           <TableColumn fx:id="timeof" prefWidth="100.0" text="Time" />
         </columns>
       </TableView>
-      <Button fx:id="butt" layoutX="555.0" layoutY="275.0" mnemonicParsing="false" onAction="#getInfo" text="Table's Data" />
-      <Button fx:id="tb" layoutX="342.0" layoutY="233.0" mnemonicParsing="false" onAction="#showTestTable" text="show test table" />
+      <Button fx:id="butt" layoutX="555.0" layoutY="31.0" mnemonicParsing="false" onAction="#getInfo" text="Table's Data" />
+      <Button fx:id="tb" layoutX="342.0" layoutY="221.0" mnemonicParsing="false" onAction="#showTestTable" text="show test table" />
           </children>
 </AnchorPane>
