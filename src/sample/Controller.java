@@ -8,18 +8,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+
 
 public class Controller implements Initializable {
 
@@ -41,7 +38,10 @@ public class Controller implements Initializable {
     public TableColumn<Detector, String> valueof;
 
     private HC05 hc05 = new HC05();
-    ObservableList<Detector> data;
+    String[] a1 = new String[300];
+
+    public Controller() throws IOException {
+    }
 
 
     @FXML
@@ -85,7 +85,52 @@ public class Controller implements Initializable {
         thread2.start();
     }
 
-    public void showTestTable(){
+    public void showTestTable() {
+
+        PrintWriter zapis = null;
+        try {
+            zapis = new PrintWriter("C:\\Users\\Piotr Szubert\\Desktop\\TEST.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for(String y : a1){
+            zapis.println(y +"\t"+ 0.5);
+        }
+        zapis.close();
+
+        ArrayList<String> list = new ArrayList<String>();
+        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Piotr Szubert\\Desktop\\TEST.txt")))
+        {
+
+            String value;
+
+            while ((value = br.readLine()) != null) {
+                list.add(value);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<Detector> lista = new ArrayList<Detector>();
+        for(String l : list) {
+            String[] tab = l.split("\t");
+            if (tab.length > 1){
+                lista.add(new Detector(tab[0], tab[1]));
+            }
+        }
+        ObservableList<Detector> dane = FXCollections.observableArrayList(lista);
+
+        valueof.setCellValueFactory(
+                new PropertyValueFactory<Detector, String>("value")
+        );
+
+        timeof.setCellValueFactory(
+                new PropertyValueFactory<Detector, String>("time")
+        );
+        table.itemsProperty().setValue(dane);
+
         Thread thread3 = new Thread(new TestTableThread());
         thread3.start();
     }
@@ -101,6 +146,49 @@ public class Controller implements Initializable {
     }
 
     public void getInfo(){
+        PrintWriter zapis = null;
+        try {
+            zapis = new PrintWriter("C:\\Users\\Piotr Szubert\\Desktop\\TEST.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for(String y : a1){
+            zapis.println(y +"\t"+ 0.5);
+        }
+        zapis.close();
+
+        ArrayList<String> list = new ArrayList<String>();
+        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Piotr Szubert\\Desktop\\TEST.txt")))
+        {
+
+            String value;
+
+            while ((value = br.readLine()) != null) {
+                list.add(value);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<Detector> lista = new ArrayList<Detector>();
+        for(String l : list) {
+            String[] tab = l.split("\t");
+            if (tab.length > 1){
+                lista.add(new Detector(tab[0], tab[1]));
+            }
+        }
+        ObservableList<Detector> dane = FXCollections.observableArrayList(lista);
+
+        valueof.setCellValueFactory(
+                new PropertyValueFactory<Detector, String>("value")
+        );
+
+        timeof.setCellValueFactory(
+                new PropertyValueFactory<Detector, String>("time")
+        );
+        table.itemsProperty().setValue(dane);
 
         Thread thread3 = new Thread(new TableThread());
         thread3.start();
@@ -146,19 +234,13 @@ public class Controller implements Initializable {
     public class TableThread implements Runnable{
         long time = 0;
         long timeSeconds;
-        int timeSeconds1=(int)timeSeconds;
+        int i=0;
 
         @Override
         public void run() {
             long currentTime;
             long endingTime;
 
-            String a=String.valueOf(hc05.getDatat());
-            String b=String.valueOf(timeSeconds);
-            data = FXCollections.observableArrayList(
-                    new Detector(a,b),
-                    new Detector(a,b)
-            );
             while (true) {
                 currentTime = System.currentTimeMillis();
                 try {
@@ -169,15 +251,8 @@ public class Controller implements Initializable {
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
 
                 Platform.runLater(() -> {
-                    table.itemsProperty().setValue(data);
-
-                    valueof.setCellValueFactory(
-                            new PropertyValueFactory<Detector, String>("nazwa")
-                    );
-
-                    timeof.setCellValueFactory(
-                            new PropertyValueFactory<Detector, String>("srednia")
-                    );
+                    a1[i] = String.valueOf(hc05.getData());
+                    i++;
                 });
                 try {
                     Thread.sleep(1000);
@@ -193,8 +268,7 @@ public class Controller implements Initializable {
     public class TestChartThread implements Runnable {
         long time=0;
         long timeSeconds;
-        int timeSeconds1=(int)timeSeconds;
-
+        int i=0;
         @Override
         public void run() {
             long currentTime;
@@ -202,13 +276,15 @@ public class Controller implements Initializable {
             while (true) {
                 currentTime = System.currentTimeMillis();
                 hc05.drawTestData();
-
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
+
                 Platform.runLater(() -> {
                     series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData()));
                     if(series.getData().size() > 10){
                         series.getData().remove(0,1);
                     }
+                    a1[i] = String.valueOf(hc05.getData());
+                    i++;
                 });
                 try {
                     Thread.sleep(1000);
@@ -216,6 +292,7 @@ public class Controller implements Initializable {
                     e.printStackTrace();
                 }
                 endingTime = System.currentTimeMillis();
+
                 time += endingTime - currentTime;
             }
         }
@@ -224,32 +301,24 @@ public class Controller implements Initializable {
     public class TestTableThread implements Runnable {
         long time=0;
         long timeSeconds;
+        int i =0;
 
         @Override
         public void run() {
             long currentTime;
             long endingTime;
+
             while (true) {
-                currentTime = System.currentTimeMillis();
+
+                    currentTime = System.currentTimeMillis();
                 hc05.drawTestData();
-                String a=String.valueOf(hc05.getDatat());
-                String b=String.valueOf(timeSeconds);
-                    data = FXCollections.observableArrayList(
-                         new Detector(a,b),
-                         new Detector(a,b)
-                );
+
+
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 Platform.runLater(() -> {
-                            table.itemsProperty().setValue(data);
-
-                            valueof.setCellValueFactory(
-                                    new PropertyValueFactory<Detector, String>("value")
-                            );
-
-                            timeof.setCellValueFactory(
-                                    new PropertyValueFactory<Detector, String>("time")
-                            );
-                });
+                    a1[i]=String.valueOf(hc05.getData());
+                    i++;
+                    });
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
