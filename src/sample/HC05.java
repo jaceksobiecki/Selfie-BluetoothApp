@@ -27,10 +27,6 @@ public class HC05{
     public int getData(int i){
         return this.data[i];
     }
-    public int getData(){
-        a++;
-        return data[a];
-    }
 
     public void go() throws IOException {
         streamConnection = (StreamConnection) Connector.open(hc05Url);
