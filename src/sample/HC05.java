@@ -13,7 +13,7 @@ public class HC05{
     private static StreamConnection streamConnection;
     private static InputStream is;
     private static int i=0;
-    private static int data[] = new int[1000];
+    private int data[] = new int[1000];
     private int a =-1;
     private static int x = 1;
 

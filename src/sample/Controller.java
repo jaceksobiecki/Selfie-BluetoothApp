@@ -18,28 +18,28 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
+
 public class Controller implements Initializable {
 
-    public static double speed;
+    private static double speed;
     @FXML
-    public AreaChart<?, ?> chart;
-    public XYChart.Series series;
+    private AreaChart<?, ?> chart;
+    private XYChart.Series series;
     @FXML
-    public Slider slider;
+    private Slider slider;
     @FXML
-    public CategoryAxis x;
+    private CategoryAxis x;
     @FXML
-    public NumberAxis y;
+    private NumberAxis y;
     @FXML
-    public TableView table;
+    private TableView table;
     @FXML
-    public TableColumn<Detector, String> timeof;
+    private TableColumn<Detector, String> timeof;
     @FXML
-    public TableColumn<Detector, String> valueof;
+    private TableColumn<Detector, String> valueof;
 
     private HC05 hc05 = new HC05();
-
-    String[] a1 = new String[3000];
+    String[] a1 = new String[300];
 
     public Controller() throws IOException {
     }
@@ -98,7 +98,7 @@ public class Controller implements Initializable {
         int time4 = 0;
         for (String y : a1) {
             if (y != null) {
-                zapis.println(y + "\t" + time4++);
+                zapis.println(y);
             }
         }
         zapis.close();
@@ -203,13 +203,14 @@ public class Controller implements Initializable {
                 currentTime = System.currentTimeMillis();
                 hc05.drawTestData();
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
-
                 Platform.runLater(() -> {
                     series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData(i)));
                     if (series.getData().size() > 10) {
                         series.getData().remove(0, 1);
                     }
-                    a1[i] = String.valueOf(hc05.getData(i));
+                    String dataS=String.valueOf(hc05.getData(i));;
+                    String timeS=String.valueOf(timeSeconds);
+                    a1[i]=dataS+"\t"+timeS;
                     i++;
                 });
                 try {
