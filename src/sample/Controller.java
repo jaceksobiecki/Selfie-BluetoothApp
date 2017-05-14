@@ -7,10 +7,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URL;
@@ -168,7 +172,7 @@ public class Controller implements Initializable {
 
                 Platform.runLater(() -> {
 
-                    series.getData().add(new XYChart.Data(timeSeconds, hc05.getData(i)));
+                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData(i)));
 
                     if (series.getData().size() > 10) {
                         series.getData().remove(0, 1);
