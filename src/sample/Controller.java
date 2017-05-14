@@ -45,9 +45,6 @@ public class Controller implements Initializable {
     private HC05 hc05 = new HC05();
     String[] a1 = new String[300];
 
-    public Controller() throws IOException {
-    }
-
 
     @FXML
     private void stop(ActionEvent event) throws Exception {

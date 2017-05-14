@@ -4,6 +4,7 @@ import javax.bluetooth.*;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -15,6 +16,7 @@ public class HC05{
     private static InputStream is;
     private static int i=0;
     private int data[] = new int[1000];
+    private ArrayList<String> devices = new ArrayList<>();
     boolean scanFinished = false;
     RemoteDevice hc05device;
 
@@ -28,17 +30,35 @@ public class HC05{
     //private static String hc05Url = "btspp://98D33380730A:1;authenticate=false;encrypt=false;master=false";
 
     private static String hc05Url;
+    private static String URL;
+
+    public ArrayList<String> getDevices() {
+        return devices;
+    }
+
+    public static String getURL() {
+        return URL;
+    }
+
+    public static String getHc05Url() {
+        return hc05Url;
+    }
 
     public int getData(int i){
         return this.data[i];
     }
 
+    public void readUrl() throws IOException {
+        BufferedReader in = new BufferedReader(new FileReader("Url.txt"));
+        URL=in.readLine();
+    }
+
     public void go() throws IOException {
-        streamConnection = (StreamConnection) Connector.open(hc05Url);
+        streamConnection = (StreamConnection) Connector.open(URL);
         os = streamConnection.openOutputStream();
         is = streamConnection.openInputStream();
 
-        System.out.println("Connected to " + hc05Url);
+        System.out.println("Connected to " + URL);
     }
 
     public void send(int a) throws Exception {
@@ -79,6 +99,7 @@ public class HC05{
             public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod) {
                 try {
                     String name = btDevice.getFriendlyName(false);
+                    devices.add(name);
                     System.out.format("%s (%s)\n", name, btDevice.getBluetoothAddress());
                     if (name.matches("HC.*")) {
                         hc05device = btDevice;
@@ -146,5 +167,13 @@ public class HC05{
 
         System.out.println(hc05device.getBluetoothAddress());
         System.out.println(hc05Url);
+        System.out.println(devices);
+    }
+
+    public void saveUrl() throws FileNotFoundException {
+        URL = hc05Url;
+        PrintWriter printWriter = new PrintWriter("Url.txt");
+        printWriter.write(URL);
+        printWriter.close();
     }
 }
