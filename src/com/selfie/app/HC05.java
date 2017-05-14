@@ -1,4 +1,4 @@
-package sample;
+package com.selfie.app;
 
 import javax.bluetooth.*;
 import javax.microedition.io.Connector;
@@ -15,7 +15,7 @@ public class HC05{
     private static StreamConnection streamConnection;
     private static InputStream is;
     private static int i=0;
-    private int data[] = new int[1000];
+    private ArrayList<Integer> data = new ArrayList<>();
     private ArrayList<String> devices = new ArrayList<>();
     boolean scanFinished = false;
     RemoteDevice hc05device;
@@ -44,8 +44,12 @@ public class HC05{
         return hc05Url;
     }
 
-    public int getData(int i){
-        return this.data[i];
+    public static void setURL(String URL) {
+        HC05.URL = URL;
+    }
+
+    public ArrayList<Integer> getData() {
+        return data;
     }
 
     public void readUrl() throws IOException {
@@ -53,12 +57,16 @@ public class HC05{
         URL=in.readLine();
     }
 
-    public void go() throws IOException {
-        streamConnection = (StreamConnection) Connector.open(URL);
-        os = streamConnection.openOutputStream();
-        is = streamConnection.openInputStream();
-
-        System.out.println("Connected to " + URL);
+    public void go(){
+        try {
+            streamConnection = (StreamConnection) Connector.open(URL);
+            os = streamConnection.openOutputStream();
+            is = streamConnection.openInputStream();
+            System.out.println("Connected to " + URL);
+        } catch(Exception e){
+            StartupController.setProblem(true);
+            StartupController.setInfo("Can't connect");
+        }
     }
 
     public void send(int a) throws Exception {
@@ -81,14 +89,12 @@ public class HC05{
         System.out.println(reade);
 
         //zapisanie wartosci w tablicy
-        data[i] = reade;
+        data.add(reade);
 
-        i++;
     }
     //Test
     public void drawTestData(){
-        data[i]= new Random().nextInt(200);
-        i++;
+        data.add(new Random().nextInt(200));
     }
 
     public void search() throws Exception{
@@ -99,7 +105,7 @@ public class HC05{
             public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod) {
                 try {
                     String name = btDevice.getFriendlyName(false);
-                    devices.add(name);
+                    devices.add(name + "    " + btDevice.getBluetoothAddress());
                     System.out.format("%s (%s)\n", name, btDevice.getBluetoothAddress());
                     if (name.matches("HC.*")) {
                         hc05device = btDevice;
@@ -127,47 +133,50 @@ public class HC05{
             //this is easier to understand (for me) as the thread stuff examples from bluecove
             Thread.sleep(500);
         }
+        try {
+            //search for services:
+            UUID uuid = new UUID(0x1101); //scan for btspp://... services (as HC-05 offers it)
+            UUID[] searchUuidSet = new UUID[]{uuid};
+            int[] attrIDs = new int[]{
+                    0x0100 // service name
+            };
+            scanFinished = false;
+            LocalDevice.getLocalDevice().getDiscoveryAgent().searchServices(attrIDs, searchUuidSet,
+                    hc05device, new DiscoveryListener() {
+                        @Override
+                        public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod) {
+                        }
 
-        //search for services:
-        UUID uuid = new UUID(0x1101); //scan for btspp://... services (as HC-05 offers it)
-        UUID[] searchUuidSet = new UUID[]{uuid};
-        int[] attrIDs = new int[]{
-                0x0100 // service name
-        };
-        scanFinished = false;
-        LocalDevice.getLocalDevice().getDiscoveryAgent().searchServices(attrIDs, searchUuidSet,
-                hc05device, new DiscoveryListener() {
-                    @Override
-                    public void deviceDiscovered(RemoteDevice btDevice, DeviceClass cod) {
-                    }
+                        @Override
+                        public void inquiryCompleted(int discType) {
+                        }
 
-                    @Override
-                    public void inquiryCompleted(int discType) {
-                    }
+                        @Override
+                        public void serviceSearchCompleted(int transID, int respCode) {
+                            scanFinished = true;
+                        }
 
-                    @Override
-                    public void serviceSearchCompleted(int transID, int respCode) {
-                        scanFinished = true;
-                    }
-
-                    @Override
-                    public void servicesDiscovered(int transID, ServiceRecord[] servRecord) {
-                        for (int i = 0; i < servRecord.length; i++) {
-                            hc05Url = servRecord[i].getConnectionURL(ServiceRecord.NOAUTHENTICATE_NOENCRYPT, false);
-                            if (hc05Url != null) {
-                                break; //take the first one
+                        @Override
+                        public void servicesDiscovered(int transID, ServiceRecord[] servRecord) {
+                            for (int i = 0; i < servRecord.length; i++) {
+                                hc05Url = servRecord[i].getConnectionURL(ServiceRecord.NOAUTHENTICATE_NOENCRYPT, false);
+                                if (hc05Url != null) {
+                                    break; //take the first one
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-        while (!scanFinished) {
-            Thread.sleep(500);
-        }
+            while (!scanFinished) {
+                Thread.sleep(500);
+            }
 
         System.out.println(hc05device.getBluetoothAddress());
         System.out.println(hc05Url);
         System.out.println(devices);
+        }catch(NullPointerException e){
+            devices.add("No devices found");
+        }
     }
 
     public void saveUrl() throws FileNotFoundException {

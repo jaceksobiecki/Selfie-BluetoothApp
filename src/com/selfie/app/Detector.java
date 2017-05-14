@@ -1,8 +1,5 @@
-package sample;
+package com.selfie.app;
 
-/**
- * Created by Piotr Szubert on 24.04.2017.
- */
 public class Detector {
         private String value;
         private String time;

@@ -1,4 +1,4 @@
-package sample;
+package com.selfie.app;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -7,14 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URL;
@@ -169,12 +165,14 @@ public class Controller implements Initializable {
 
                 Platform.runLater(() -> {
 
-                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData(i)));
+                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
 
                     if (series.getData().size() > 10) {
                         series.getData().remove(0, 1);
                     }
-                    a1[i] = String.valueOf(hc05.getData(i));
+                    String dataS=String.valueOf(hc05.getData().get(i));;
+                    String timeS=String.valueOf(timeSeconds);
+                    a1[i]=dataS+"\t"+timeS;
                     i++;
                 });
                 try {
@@ -205,11 +203,11 @@ public class Controller implements Initializable {
                 hc05.drawTestData();
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 Platform.runLater(() -> {
-                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData(i)));
+                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
                     if (series.getData().size() > 10) {
                         series.getData().remove(0, 1);
                     }
-                    String dataS=String.valueOf(hc05.getData(i));;
+                    String dataS=String.valueOf(hc05.getData().get(i));;
                     String timeS=String.valueOf(timeSeconds);
                     a1[i]=dataS+"\t"+timeS;
                     i++;
