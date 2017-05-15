@@ -1,4 +1,4 @@
-package sample;
+package com.selfie.app;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -13,9 +13,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 727, 600));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("StartupWindow.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        primaryStage.setTitle("Selfie App");
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override

@@ -1,4 +1,4 @@
-package sample;
+package com.selfie.app;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Controller implements Initializable {
+    private int dataSend;
+    private boolean isRunning=false;
 
     private static double speed;
     @FXML
@@ -39,102 +41,53 @@ public class Controller implements Initializable {
     private TableColumn<Detector, String> valueof;
 
     private HC05 hc05 = new HC05();
-    String[] a1 = new String[300];
-
-    public Controller() throws IOException {
-    }
+    ArrayList<String> list = new ArrayList<String>();
 
 
     @FXML
     private void stop(ActionEvent event) throws Exception {
-        hc05.send(250);
+        HC05send hc05send = new HC05send();
+        dataSend=250;
+        hc05send.start();
     }
 
     @FXML
     private void up(ActionEvent event) throws Exception {
-        hc05.send(251);
+        HC05send hc05send = new HC05send();
+        dataSend=251;
+        hc05send.start();
     }
 
     @FXML
     private void down(ActionEvent event) throws Exception {
-        hc05.send(252);
+        HC05send hc05send = new HC05send();
+        dataSend=252;
+        hc05send.start();
     }
 
     @FXML
     private void left(ActionEvent event) throws Exception {
-        hc05.send(253);
+        HC05send hc05send = new HC05send();
+        dataSend=253;
+        hc05send.start();
     }
 
     @FXML
     private void right(ActionEvent event) throws Exception {
-        hc05.send(254);
-    }
-
-    @FXML
-    private void connect(ActionEvent event) throws IOException {
-        hc05.go();
+        HC05send hc05send = new HC05send();
+        dataSend=254;
+        hc05send.start();
     }
 
     //Test
     @FXML
-    public void showTestChart() {
+    public void showTestData() {
 
         series = new XYChart.Series();
         chart.getData().addAll(series);
 
-
-        Thread thread2 = new Thread(new TestChartThread());
+        Thread thread2 = new Thread(new TestDataThread());
         thread2.start();
-    }
-    @FXML
-    public void showTable() {
-
-        PrintWriter zapis = null;
-        try {
-            zapis = new PrintWriter("TEST.txt");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        int time4 = 0;
-        for (String y : a1) {
-            if (y != null) {
-                zapis.println(y);
-            }
-        }
-        zapis.close();
-
-        ArrayList<String> list = new ArrayList<String>();
-        try (BufferedReader br = new BufferedReader(new FileReader("TEST.txt"))) {
-
-            String value;
-
-            while ((value = br.readLine()) != null) {
-                list.add(value);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        ArrayList<Detector> lista = new ArrayList<Detector>();
-        for (String l : list) {
-            String[] tab = l.split("\t");
-            if (tab.length > 1) {
-                lista.add(new Detector(tab[0], tab[1]));
-            }
-        }
-        ObservableList<Detector> dane = FXCollections.observableArrayList(lista);
-
-        valueof.setCellValueFactory(
-                new PropertyValueFactory<Detector, String>("value")
-        );
-
-        timeof.setCellValueFactory(
-                new PropertyValueFactory<Detector, String>("time")
-        );
-        table.itemsProperty().setValue(dane);
-
-
     }
 
     @FXML
@@ -143,12 +96,12 @@ public class Controller implements Initializable {
         series = new XYChart.Series();
         chart.getData().addAll(series);
 
-        Thread thread2 = new Thread(new ChartThread());
+        Thread thread2 = new Thread(new DataThread());
         thread2.start();
     }
 
 
-    public class ChartThread implements Runnable {
+    public class DataThread implements Runnable {
         long time = 0;
         long timeSeconds;
         int i =0;
@@ -168,12 +121,29 @@ public class Controller implements Initializable {
 
                 Platform.runLater(() -> {
 
-                    series.getData().add(new XYChart.Data(timeSeconds, hc05.getData(i)));
-
+                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
                     if (series.getData().size() > 10) {
                         series.getData().remove(0, 1);
                     }
-                    a1[i] = String.valueOf(hc05.getData(i));
+
+                    list.add(String.valueOf(hc05.getData().get(i)+"\t"+String.valueOf(timeSeconds)));
+                    ArrayList<Detector> lista = new ArrayList<Detector>();
+                    for (String l : list) {
+                        String[] tab = l.split("\t");
+                        if (tab.length > 1) {
+                            lista.add(new Detector(tab[0], tab[1]));
+                        }
+                    }
+                    ObservableList<Detector> dane = FXCollections.observableArrayList(lista);
+
+                    valueof.setCellValueFactory(
+                            new PropertyValueFactory<Detector, String>("value")
+                    );
+
+                    timeof.setCellValueFactory(
+                            new PropertyValueFactory<Detector, String>("time")
+                    );
+                    table.itemsProperty().setValue(dane);
                     i++;
                 });
                 try {
@@ -188,7 +158,7 @@ public class Controller implements Initializable {
     }
 
     //Test
-    public class TestChartThread implements Runnable {
+    public class TestDataThread implements Runnable {
         long time = 0;
         long timeSeconds;
         int i = 0;
@@ -204,13 +174,29 @@ public class Controller implements Initializable {
                 hc05.drawTestData();
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 Platform.runLater(() -> {
-                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData(i)));
+                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
                     if (series.getData().size() > 10) {
                         series.getData().remove(0, 1);
                     }
-                    String dataS=String.valueOf(hc05.getData(i));;
-                    String timeS=String.valueOf(timeSeconds);
-                    a1[i]=dataS+"\t"+timeS;
+
+                    list.add(String.valueOf(hc05.getData().get(i)+"\t"+String.valueOf(timeSeconds)));
+                    ArrayList<Detector> lista = new ArrayList<Detector>();
+                    for (String l : list) {
+                        String[] tab = l.split("\t");
+                        if (tab.length > 1) {
+                            lista.add(new Detector(tab[0], tab[1]));
+                        }
+                    }
+                    ObservableList<Detector> dane = FXCollections.observableArrayList(lista);
+
+                    valueof.setCellValueFactory(
+                            new PropertyValueFactory<Detector, String>("value")
+                    );
+
+                    timeof.setCellValueFactory(
+                            new PropertyValueFactory<Detector, String>("time")
+                    );
+                    table.itemsProperty().setValue(dane);
                     i++;
                 });
                 try {
@@ -234,13 +220,23 @@ public class Controller implements Initializable {
             public void changed(ObservableValue<? extends Number> observable,
                                 Number oldValue, Number newValue) {
                 speed = (double) newValue;
-                try {
-                    hc05.send((int) speed);
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
+                dataSend=(int)speed;
+                if(!isRunning)
+                    new HC05send().start();
             }
         });
+    }
+
+    public class HC05send extends Thread{
+        public void run(){
+            isRunning=true;
+                try {
+                    hc05.send(dataSend);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                isRunning=false;
+        }
     }
 
 }
