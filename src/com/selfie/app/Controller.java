@@ -79,23 +79,15 @@ public class Controller implements Initializable {
         hc05send.start();
     }
 
-    @FXML
-    private void connect(ActionEvent event) throws IOException{
-        hc05.go();
-    }
-
     //Test
     @FXML
-    public void showTestChart() {
+    public void showTestData() {
 
         series = new XYChart.Series();
         chart.getData().addAll(series);
 
-        Thread thread2 = new Thread(new TestChartThread());
+        Thread thread2 = new Thread(new TestDataThread());
         thread2.start();
-    }
-    @FXML
-    public void showTable() {
     }
 
     @FXML
@@ -104,12 +96,12 @@ public class Controller implements Initializable {
         series = new XYChart.Series();
         chart.getData().addAll(series);
 
-        Thread thread2 = new Thread(new ChartThread());
+        Thread thread2 = new Thread(new DataThread());
         thread2.start();
     }
 
 
-    public class ChartThread implements Runnable {
+    public class DataThread implements Runnable {
         long time = 0;
         long timeSeconds;
         int i =0;
@@ -166,7 +158,7 @@ public class Controller implements Initializable {
     }
 
     //Test
-    public class TestChartThread implements Runnable {
+    public class TestDataThread implements Runnable {
         long time = 0;
         long timeSeconds;
         int i = 0;

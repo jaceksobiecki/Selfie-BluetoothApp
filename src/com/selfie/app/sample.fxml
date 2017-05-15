@@ -39,7 +39,6 @@
                 <Font size="10.0" />
             </font>
         </Button>
-        <Button layoutX="194.0" layoutY="233.0" mnemonicParsing="false" onAction="#connect" text="Connect" />
         <Label layoutX="53.0" layoutY="35.0" text="Speed:" />
         <Label layoutX="206.0" layoutY="35.0" text="Steering:" />
       <Button fx:id="getter" layoutX="364.0" layoutY="87.0" mnemonicParsing="false" onAction="#getData" text="Get Data" />
@@ -51,14 +50,13 @@
           <NumberAxis fx:id="y" animated="false" autoRanging="false" label="data" side="LEFT" upperBound="200.0" />
         </yAxis>
       </AreaChart>
-      <Button fx:id="show" layoutX="341.0" layoutY="144.0" mnemonicParsing="false" onAction="#showTestChart" prefHeight="27.0" prefWidth="120.0" text="Test Chart" />
+      <Button fx:id="show" layoutX="341.0" layoutY="144.0" mnemonicParsing="false" onAction="#showTestData" prefHeight="27.0" prefWidth="120.0" text="Test Data" />
       <TableView fx:id="table" layoutX="495.0" layoutY="30.0" prefHeight="281.0" prefWidth="207.0">
         <columns>
           <TableColumn fx:id="valueof" prefWidth="100.0" text="Value" />
           <TableColumn fx:id="timeof" prefWidth="106.0" text="Time" />
         </columns>
       </TableView>
-      <Button fx:id="tb" layoutX="356.0" layoutY="206.0" mnemonicParsing="false" onAction="#showTable" text="show Table" />
       <Separator layoutX="134.0" layoutY="57.0" orientation="VERTICAL" prefHeight="200.0" />
       <Separator layoutX="314.0" layoutY="57.0" orientation="VERTICAL" prefHeight="200.0" />
           </children>

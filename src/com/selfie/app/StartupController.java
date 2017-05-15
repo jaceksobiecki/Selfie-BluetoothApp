@@ -99,7 +99,7 @@ public class StartupController implements Initializable {
 
     public void connect() throws IOException, InterruptedException {
         //hc05Search.kill();
-        //hc05Search.stop();
+        hc05Search.stop();
         hc05go.start();
 
     }
@@ -198,7 +198,7 @@ public class StartupController implements Initializable {
             try {
                 hc05.go();
             } catch (Exception e) {
-                System.out.println("mamy problem");
+                e.printStackTrace();
             }
             Platform.runLater(() -> {
                 try {
@@ -207,7 +207,6 @@ public class StartupController implements Initializable {
                     e.printStackTrace();
                 }
             });
-            System.out.println("koniec");
         }
     }
 }
