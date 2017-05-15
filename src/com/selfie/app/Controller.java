@@ -39,7 +39,7 @@ public class Controller implements Initializable {
     private TableColumn<Detector, String> valueof;
 
     private HC05 hc05 = new HC05();
-    String[] a1 = new String[300];
+    ArrayList<String> list = new ArrayList<String>();
 
 
     @FXML
@@ -79,59 +79,11 @@ public class Controller implements Initializable {
         series = new XYChart.Series();
         chart.getData().addAll(series);
 
-
         Thread thread2 = new Thread(new TestChartThread());
         thread2.start();
     }
     @FXML
     public void showTable() {
-
-        PrintWriter zapis = null;
-        try {
-            zapis = new PrintWriter("TEST.txt");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        int time4 = 0;
-        for (String y : a1) {
-            if (y != null) {
-                zapis.println(y);
-            }
-        }
-        zapis.close();
-
-        ArrayList<String> list = new ArrayList<String>();
-        try (BufferedReader br = new BufferedReader(new FileReader("TEST.txt"))) {
-
-            String value;
-
-            while ((value = br.readLine()) != null) {
-                list.add(value);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        ArrayList<Detector> lista = new ArrayList<Detector>();
-        for (String l : list) {
-            String[] tab = l.split("\t");
-            if (tab.length > 1) {
-                lista.add(new Detector(tab[0], tab[1]));
-            }
-        }
-        ObservableList<Detector> dane = FXCollections.observableArrayList(lista);
-
-        valueof.setCellValueFactory(
-                new PropertyValueFactory<Detector, String>("value")
-        );
-
-        timeof.setCellValueFactory(
-                new PropertyValueFactory<Detector, String>("time")
-        );
-        table.itemsProperty().setValue(dane);
-
-
     }
 
     @FXML
@@ -166,13 +118,28 @@ public class Controller implements Initializable {
                 Platform.runLater(() -> {
 
                     series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
-
                     if (series.getData().size() > 10) {
                         series.getData().remove(0, 1);
                     }
-                    String dataS=String.valueOf(hc05.getData().get(i));;
-                    String timeS=String.valueOf(timeSeconds);
-                    a1[i]=dataS+"\t"+timeS;
+
+                    list.add(String.valueOf(hc05.getData().get(i)+"\t"+String.valueOf(timeSeconds)));
+                    ArrayList<Detector> lista = new ArrayList<Detector>();
+                    for (String l : list) {
+                        String[] tab = l.split("\t");
+                        if (tab.length > 1) {
+                            lista.add(new Detector(tab[0], tab[1]));
+                        }
+                    }
+                    ObservableList<Detector> dane = FXCollections.observableArrayList(lista);
+
+                    valueof.setCellValueFactory(
+                            new PropertyValueFactory<Detector, String>("value")
+                    );
+
+                    timeof.setCellValueFactory(
+                            new PropertyValueFactory<Detector, String>("time")
+                    );
+                    table.itemsProperty().setValue(dane);
                     i++;
                 });
                 try {
@@ -207,9 +174,25 @@ public class Controller implements Initializable {
                     if (series.getData().size() > 10) {
                         series.getData().remove(0, 1);
                     }
-                    String dataS=String.valueOf(hc05.getData().get(i));;
-                    String timeS=String.valueOf(timeSeconds);
-                    a1[i]=dataS+"\t"+timeS;
+
+                    list.add(String.valueOf(hc05.getData().get(i)+"\t"+String.valueOf(timeSeconds)));
+                    ArrayList<Detector> lista = new ArrayList<Detector>();
+                    for (String l : list) {
+                        String[] tab = l.split("\t");
+                        if (tab.length > 1) {
+                            lista.add(new Detector(tab[0], tab[1]));
+                        }
+                    }
+                    ObservableList<Detector> dane = FXCollections.observableArrayList(lista);
+
+                    valueof.setCellValueFactory(
+                            new PropertyValueFactory<Detector, String>("value")
+                    );
+
+                    timeof.setCellValueFactory(
+                            new PropertyValueFactory<Detector, String>("time")
+                    );
+                    table.itemsProperty().setValue(dane);
                     i++;
                 });
                 try {
