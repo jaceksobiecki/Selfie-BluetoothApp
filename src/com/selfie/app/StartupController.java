@@ -21,30 +21,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-/**
- * Created by Jacek on 13.05.2017.
- */
 public class StartupController implements Initializable {
     private static String info;
     private static boolean problem = false;
-    private HC05 hc05 = new HC05();
-    private HC05Search hc05Search = new HC05Search();
-    private boolean newListVisible = false;
-
-    public static void setInfo(String info) {
-        StartupController.info = info;
-    }
-
-    public static String getInfo() {
-        return info;
-    }
-
-    public static void setProblem(boolean problem) {
-        StartupController.problem = problem;
-    }
-
     @FXML
     AnchorPane anchorPane;
+    private HC05 hc05 = new HC05();
+    private HC05Search hc05Search = new HC05Search();
+    private HC05go hc05go = new HC05go();
+    private boolean newListVisible = false;
     @FXML
     private ListView<String> listViewLast = new ListView<>();
     @FXML
@@ -54,8 +39,20 @@ public class StartupController implements Initializable {
     @FXML
     private Label lastDeviceLabel;
 
+    public static String getInfo() {
+        return info;
+    }
+
+    public static void setInfo(String info) {
+        StartupController.info = info;
+    }
+
+    public static void setProblem(boolean problem) {
+        StartupController.problem = problem;
+    }
+
     @FXML
-    private void chooseDevice() throws IOException {
+    private void chooseDevice() throws IOException, InterruptedException {
         if (listViewLast.isVisible()) {
             if (newListVisible) {
                 if (listViewNew.getSelectionModel().isEmpty())
@@ -64,8 +61,7 @@ public class StartupController implements Initializable {
                     if (listViewNew.getSelectionModel().getSelectedItem().matches("HC.*")) {
                         hc05.saveUrl();
                         connect();
-                    }
-                    else {
+                    } else {
                         info = "Unsupported device";
                         try {
                             popupWindow();
@@ -74,8 +70,7 @@ public class StartupController implements Initializable {
                         }
                     }
                 }
-            }
-            else
+            } else
                 connect();
 
         } else {
@@ -86,13 +81,11 @@ public class StartupController implements Initializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-            else {
+            } else {
                 if (listViewNew.getSelectionModel().getSelectedItem().matches("HC.*")) {
                     hc05.saveUrl();
                     connect();
-                }
-                else {
+                } else {
                     info = "Unsupported device";
                     try {
                         popupWindow();
@@ -104,12 +97,17 @@ public class StartupController implements Initializable {
         }
     }
 
-    public void connect() throws IOException {
-        hc05Search.kill();
-        hc05.go();
-        if(problem)
+    public void connect() throws IOException, InterruptedException {
+        //hc05Search.kill();
+        //hc05Search.stop();
+        hc05go.start();
+
+    }
+
+    public void newWindow() throws IOException {
+        if (problem)
             popupWindow();
-        else if(problem==false) {
+        else {
             Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Selfie App");
@@ -119,11 +117,6 @@ public class StartupController implements Initializable {
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent t) {
-                    try {
-                        HC05.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                     Platform.exit();
                     System.exit(0);
                 }
@@ -157,14 +150,14 @@ public class StartupController implements Initializable {
         listViewLast.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if(listViewLast.getSelectionModel().isEmpty()==false)
+                if (listViewLast.getSelectionModel().isEmpty() == false)
                     listViewNew.getSelectionModel().clearSelection();
             }
         });
         listViewNew.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if(listViewNew.getSelectionModel().isEmpty()==false)
+                if (listViewNew.getSelectionModel().isEmpty() == false)
                     listViewLast.getSelectionModel().clearSelection();
             }
         });
@@ -174,6 +167,7 @@ public class StartupController implements Initializable {
 
     public class HC05Search extends Thread {
         private volatile boolean isRunning = true;
+
         public void run() {
             while (isRunning) {
                 try {
@@ -181,7 +175,7 @@ public class StartupController implements Initializable {
                     ObservableList<String> list2 = FXCollections.observableArrayList(hc05.getDevices());
                     listViewNew.setItems(list2);
                     Platform.runLater(() -> {
-                        if(listViewLast.isVisible()==false)
+                        if (listViewLast.isVisible() == false)
                             newDevicesLabel.setText("Devices Found");
                         else
                             newDevicesLabel.setText("New Devices:");
@@ -193,8 +187,27 @@ public class StartupController implements Initializable {
                 isRunning = false;
             }
         }
+
         public void kill() {
             isRunning = false;
+        }
+    }
+
+    public class HC05go extends Thread {
+        public void run() {
+            try {
+                hc05.go();
+            } catch (Exception e) {
+                System.out.println("mamy problem");
+            }
+            Platform.runLater(() -> {
+                try {
+                    newWindow();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            System.out.println("koniec");
         }
     }
 }

@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Controller implements Initializable {
+    private int dataSend;
+    private boolean isRunning=false;
 
     private static double speed;
     @FXML
@@ -44,31 +46,41 @@ public class Controller implements Initializable {
 
     @FXML
     private void stop(ActionEvent event) throws Exception {
-        hc05.send(250);
+        HC05send hc05send = new HC05send();
+        dataSend=250;
+        hc05send.start();
     }
 
     @FXML
     private void up(ActionEvent event) throws Exception {
-        hc05.send(251);
+        HC05send hc05send = new HC05send();
+        dataSend=251;
+        hc05send.start();
     }
 
     @FXML
     private void down(ActionEvent event) throws Exception {
-        hc05.send(252);
+        HC05send hc05send = new HC05send();
+        dataSend=252;
+        hc05send.start();
     }
 
     @FXML
     private void left(ActionEvent event) throws Exception {
-        hc05.send(253);
+        HC05send hc05send = new HC05send();
+        dataSend=253;
+        hc05send.start();
     }
 
     @FXML
     private void right(ActionEvent event) throws Exception {
-        hc05.send(254);
+        HC05send hc05send = new HC05send();
+        dataSend=254;
+        hc05send.start();
     }
 
     @FXML
-    private void connect(ActionEvent event) throws IOException {
+    private void connect(ActionEvent event) throws IOException{
         hc05.go();
     }
 
@@ -233,13 +245,23 @@ public class Controller implements Initializable {
             public void changed(ObservableValue<? extends Number> observable,
                                 Number oldValue, Number newValue) {
                 speed = (double) newValue;
-                try {
-                    hc05.send((int) speed);
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
+                dataSend=(int)speed;
+                if(!isRunning)
+                    new HC05send().start();
             }
         });
+    }
+
+    public class HC05send extends Thread{
+        public void run(){
+            isRunning=true;
+                try {
+                    hc05.send(dataSend);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                isRunning=false;
+        }
     }
 
 }

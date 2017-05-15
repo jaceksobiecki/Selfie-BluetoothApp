@@ -15,8 +15,8 @@ public class HC05{
     private static StreamConnection streamConnection;
     private static InputStream is;
     private static int i=0;
-    private ArrayList<Integer> data = new ArrayList<>();
-    private ArrayList<String> devices = new ArrayList<>();
+    private static ArrayList<Integer> data = new ArrayList<>();
+    private static ArrayList<String> devices = new ArrayList<>();
     boolean scanFinished = false;
     RemoteDevice hc05device;
 
@@ -58,6 +58,7 @@ public class HC05{
     }
 
     public void go(){
+        System.out.println("Connecting");
         try {
             streamConnection = (StreamConnection) Connector.open(URL);
             os = streamConnection.openOutputStream();
@@ -99,6 +100,7 @@ public class HC05{
 
     public void search() throws Exception{
         //scan for all devices:
+        System.out.println("searching for devices");
         scanFinished = false;
         LocalDevice.getLocalDevice().getDiscoveryAgent().startInquiry(DiscoveryAgent.GIAC, new DiscoveryListener() {
             @Override
