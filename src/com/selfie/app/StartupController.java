@@ -147,6 +147,8 @@ public class StartupController implements Initializable {
             newDevicesLabel.setLayoutY(120);
             listViewNew.setLayoutY(145);
             listViewNew.setPrefHeight(180);
+            progressBar.setVisible(true);
+            connectBtn.setDisable(true);
         }
         ObservableList<String> list1 = FXCollections.observableArrayList(hc05.getURL());
         listViewLast.setItems(list1);
@@ -175,8 +177,6 @@ public class StartupController implements Initializable {
 
         public void run() {
             while (isRunning) {
-                progressBar.setVisible(true);
-                connectBtn.setDisable(true);
                 try {
                     hc05.search();
                     ObservableList<String> list2 = FXCollections.observableArrayList(hc05.getDevices());
