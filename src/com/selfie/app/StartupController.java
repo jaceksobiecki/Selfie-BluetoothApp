@@ -11,8 +11,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -28,7 +30,6 @@ public class StartupController implements Initializable {
     AnchorPane anchorPane;
     private HC05 hc05 = new HC05();
     private HC05Search hc05Search = new HC05Search();
-    private HC05go hc05go = new HC05go();
     private boolean newListVisible = false;
     @FXML
     private ListView<String> listViewLast = new ListView<>();
@@ -38,6 +39,10 @@ public class StartupController implements Initializable {
     private Label newDevicesLabel;
     @FXML
     private Label lastDeviceLabel;
+    @FXML
+    private Button connectBtn;
+    @FXML
+    private ProgressBar progressBar;
 
     public static String getInfo() {
         return info;
@@ -100,7 +105,7 @@ public class StartupController implements Initializable {
     public void connect() throws IOException, InterruptedException {
         //hc05Search.kill();
         hc05Search.stop();
-        hc05go.start();
+        new HC05go().start();
 
     }
 
@@ -141,7 +146,7 @@ public class StartupController implements Initializable {
             listViewLast.setVisible(false);
             newDevicesLabel.setLayoutY(120);
             listViewNew.setLayoutY(145);
-            listViewNew.setPrefHeight(200);
+            listViewNew.setPrefHeight(180);
         }
         ObservableList<String> list1 = FXCollections.observableArrayList(hc05.getURL());
         listViewLast.setItems(list1);
@@ -170,6 +175,8 @@ public class StartupController implements Initializable {
 
         public void run() {
             while (isRunning) {
+                progressBar.setVisible(true);
+                connectBtn.setDisable(true);
                 try {
                     hc05.search();
                     ObservableList<String> list2 = FXCollections.observableArrayList(hc05.getDevices());
@@ -184,6 +191,8 @@ public class StartupController implements Initializable {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                progressBar.setVisible(false);
+                connectBtn.setDisable(false);
                 isRunning = false;
             }
         }
@@ -195,6 +204,8 @@ public class StartupController implements Initializable {
 
     public class HC05go extends Thread {
         public void run() {
+            connectBtn.setDisable(true);
+            progressBar.setVisible(true);
             try {
                 hc05.go();
             } catch (Exception e) {
@@ -207,6 +218,8 @@ public class StartupController implements Initializable {
                     e.printStackTrace();
                 }
             });
+            progressBar.setVisible(false);
+            connectBtn.setDisable(false);
         }
     }
 }
