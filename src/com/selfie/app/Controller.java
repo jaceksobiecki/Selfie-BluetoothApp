@@ -39,7 +39,34 @@ public class Controller implements Initializable {
     private TableColumn<Detector, String> timeof;
     @FXML
     private TableColumn<Detector, String> valueof;
-
+    /////////////////////////////////////////
+    @FXML
+    private TextField textField;
+    @FXML
+    private Button sendBtn;
+    @FXML
+    private void sendBtn(){
+        try {
+            dataSend = Integer.valueOf(textField.getText());
+            System.out.println(dataSend);
+            new HC05send().start();
+        }catch(Exception e){
+            StartupController startupController = new StartupController();
+            startupController.info="wrong data, choose from 0-255";
+            try {
+                startupController.popupWindow();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    @FXML
+    private void info() throws IOException {
+        StartupController startupController = new StartupController();
+        startupController.info="up - 251, stop - 250, down - 252, left - 253, right - 254, slider 0-200";
+        startupController.popupWindow();
+    }
+//////////////////////////////////////////////////////
     private HC05 hc05 = new HC05();
     ArrayList<String> list = new ArrayList<String>();
 

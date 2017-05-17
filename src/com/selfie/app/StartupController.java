@@ -24,7 +24,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class StartupController implements Initializable {
-    private static String info;
+    public static String info;
     private static boolean problem = false;
     @FXML
     AnchorPane anchorPane;

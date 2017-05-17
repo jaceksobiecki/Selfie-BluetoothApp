@@ -9,6 +9,7 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -59,5 +60,8 @@
       </TableView>
       <Separator layoutX="134.0" layoutY="57.0" orientation="VERTICAL" prefHeight="200.0" />
       <Separator layoutX="314.0" layoutY="57.0" orientation="VERTICAL" prefHeight="200.0" />
+      <TextField fx:id="textField" layoutX="151.0" layoutY="230.0" prefHeight="27.0" prefWidth="147.0" promptText="send int" />
+      <Button fx:id="sendBtn" layoutX="195.0" layoutY="261.0" mnemonicParsing="false" onAction="#sendBtn" text="Send" />
+      <Button layoutX="151.0" layoutY="57.0" mnemonicParsing="false" onAction="#info" prefHeight="27.0" prefWidth="43.0" text="info" />
           </children>
 </AnchorPane>
