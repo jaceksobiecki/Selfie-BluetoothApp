@@ -8,7 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="452.0" prefWidth="376.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.selfie.app.StartupController">
+<AnchorPane fx:id="anchorPane" prefHeight="452.0" prefWidth="376.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.selfie.app.StartupController">
    <children>
       <Button fx:id="connectBtn" layoutX="149.0" layoutY="358.0" mnemonicParsing="false" onAction="#chooseDevice" prefHeight="34.0" prefWidth="78.0" text="Connect" />
       <ListView fx:id="listViewLast" layoutX="42.0" layoutY="144.0" prefHeight="59.0" prefWidth="301.0" />
