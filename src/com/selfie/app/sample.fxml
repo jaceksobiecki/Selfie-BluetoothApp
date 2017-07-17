@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.selfie.app.Controller">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.selfie.app.Controller">
     <children>
         <Button fx:id="up" layoutY="80.0" mnemonicParsing="false" onAction="#up" prefHeight="40.0" prefWidth="40.0" text="up" AnchorPane.leftAnchor="209.0">
             <font>
@@ -25,7 +25,7 @@
                 <Font size="10.0" />
             </font>
         </Button>
-        <Button layoutX="209.0" layoutY="128.0" mnemonicParsing="false" onAction="#stop" prefHeight="40.0" prefWidth="40.0" text="stop" AnchorPane.topAnchor="128.0">
+        <Button fx:id="stopBtn" layoutX="209.0" layoutY="128.0" mnemonicParsing="false" onAction="#stop" prefHeight="40.0" prefWidth="40.0" text="stop" AnchorPane.topAnchor="128.0">
             <font>
                 <Font size="10.0" />
             </font>

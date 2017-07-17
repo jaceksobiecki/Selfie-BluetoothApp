@@ -132,7 +132,6 @@ public class HC05{
             }
         });
         while (!scanFinished) {
-            //this is easier to understand (for me) as the thread stuff examples from bluecove
             Thread.sleep(500);
         }
         try {

@@ -6,11 +6,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.*;
 import java.net.URL;
@@ -24,6 +28,10 @@ public class Controller implements Initializable {
     private boolean isRunning=false;
 
     private static double speed;
+    @FXML
+    private AnchorPane pane;
+    @FXML
+    private Button stopBtn;
     @FXML
     private AreaChart<?, ?> chart;
     private XYChart.Series series;
@@ -242,6 +250,58 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        pane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                slider.requestFocus();
+                if(event.getCode() == KeyCode.W){
+                    HC05send hc05send = new HC05send();
+                    dataSend=251;
+                    hc05send.start();
+                }
+                else if(event.getCode() == KeyCode.S){
+                    HC05send hc05send = new HC05send();
+                    dataSend=252;
+                    hc05send.start();
+                }
+                else if(event.getCode() == KeyCode.A){
+                    HC05send hc05send = new HC05send();
+                    dataSend=253;
+                    hc05send.start();
+                }
+                else if(event.getCode() == KeyCode.D){
+                    HC05send hc05send = new HC05send();
+                    dataSend=254;
+                    hc05send.start();
+                }
+            }
+        });
+        pane.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.W){
+                    HC05send hc05send = new HC05send();
+                    dataSend=250;
+                    hc05send.start();
+                }
+                else if(event.getCode() == KeyCode.S){
+                    HC05send hc05send = new HC05send();
+                    dataSend=250;
+                    hc05send.start();
+                }
+                else if(event.getCode() == KeyCode.A){
+                    HC05send hc05send = new HC05send();
+                    dataSend=250;
+                    hc05send.start();
+                }
+                else if(event.getCode() == KeyCode.D){
+                    HC05send hc05send = new HC05send();
+                    dataSend=250;
+                    hc05send.start();
+                }
+            }
+        });
+
         slider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable,
