@@ -19,7 +19,7 @@ public class HC05{
     private static ArrayList<String> devices = new ArrayList<>();
     boolean scanFinished = false;
     RemoteDevice hc05device;
-
+    char[] bytes=new char[32];
     //set your hc05Url
 
     //Bt Piotrek
@@ -74,24 +74,35 @@ public class HC05{
         os.write(a);
     }
 
+    public void send1(byte[] a) throws Exception {
+        os.write(a,0,3);
+    }
+
     public static void close() throws IOException {
         os.close();
         is.close();
         streamConnection.close();
     }
-
     public void getValueOfDetector() throws IOException {
-
-
+data.clear();
         //zczytywanie danych z czujnika, zamiana na int
-        BufferedReader bReader = new BufferedReader(new InputStreamReader(is));
-        String read = bReader.readLine();
-        int reade = Integer.valueOf(read);
-        System.out.println(reade);
+
+        DataInputStream disReader = new DataInputStream(is);
+            if(is.available()>0) {
+
+                for(int i=0;i<16;i++){
+                    byte read = disReader.readByte();
+                    System.out.println(read);
+                    data.add(Integer.valueOf(read));
+                }
+
+            }
+        System.out.println(data);
+
+
+            System.out.println("wartosc");
 
         //zapisanie wartosci w tablicy
-        data.add(reade);
-
     }
     //Test
     public void drawTestData(){
@@ -109,7 +120,7 @@ public class HC05{
                     String name = btDevice.getFriendlyName(false);
                     devices.add(name + "    " + btDevice.getBluetoothAddress());
                     System.out.format("%s (%s)\n", name, btDevice.getBluetoothAddress());
-                    if (name.matches("HC.*")) {
+                    if (name.matches("HC-05")) {
                         hc05device = btDevice;
                         System.out.println("got it!");
                     }

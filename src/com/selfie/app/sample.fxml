@@ -5,6 +5,8 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TableColumn?>
@@ -13,7 +15,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.selfie.app.Controller">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="626.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.selfie.app.Controller">
     <children>
         <Button fx:id="up" layoutY="80.0" mnemonicParsing="false" onAction="#up" prefHeight="40.0" prefWidth="40.0" text="up" AnchorPane.leftAnchor="209.0">
             <font>
@@ -42,7 +44,6 @@
         </Button>
         <Label layoutX="53.0" layoutY="35.0" text="Speed:" />
         <Label layoutX="206.0" layoutY="35.0" text="Steering:" />
-      <Button fx:id="getter" layoutX="364.0" layoutY="87.0" mnemonicParsing="false" onAction="#getData" text="Get Data" />
       <AreaChart fx:id="chart" animated="false" createSymbols="false" layoutX="12.0" layoutY="287.0" prefHeight="308.0" prefWidth="707.0" title="Data">
         <xAxis>
           <CategoryAxis animated="false" endMargin="0.0" label="time[sec]" pickOnBounds="false" side="BOTTOM" startMargin="0.0" fx:id="x" />
@@ -63,5 +64,11 @@
       <TextField fx:id="textField" layoutX="151.0" layoutY="230.0" prefHeight="27.0" prefWidth="147.0" promptText="send int" />
       <Button fx:id="sendBtn" layoutX="195.0" layoutY="261.0" mnemonicParsing="false" onAction="#sendBtn" text="Send" />
       <Button layoutX="151.0" layoutY="57.0" mnemonicParsing="false" onAction="#info" prefHeight="27.0" prefWidth="43.0" text="info" />
+      <Button layoutX="375.0" layoutY="183.0" mnemonicParsing="false" onAction="#startData1" text="start1" />
+      <Button layoutX="375.0" layoutY="218.0" mnemonicParsing="false" onAction="#startData2" text="start2" />
+      <Button layoutX="375.0" layoutY="249.0" mnemonicParsing="false" onAction="#stopData" text="stop" />
+      <Button layoutX="427.0" layoutY="218.0" mnemonicParsing="false" onAction="#diagramON" text="diag on" />
+      <Button layoutX="430.0" layoutY="249.0" mnemonicParsing="false" onAction="#diagramOFF" text="diag off" />
+
           </children>
 </AnchorPane>

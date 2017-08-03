@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Controller implements Initializable {
     private int dataSend;
+    private byte[] dataButton=new byte[3];
     private boolean isRunning=false;
 
     private static double speed;
@@ -34,7 +35,14 @@ public class Controller implements Initializable {
     private Button stopBtn;
     @FXML
     private AreaChart<?, ?> chart;
-    private XYChart.Series series;
+    private XYChart.Series series1;
+    private XYChart.Series series2;
+    private XYChart.Series series3;
+    private XYChart.Series series4;
+    private XYChart.Series series5;
+    private XYChart.Series series6;
+    private XYChart.Series series7;
+    private XYChart.Series series8;
     @FXML
     private Slider slider;
     @FXML
@@ -42,7 +50,7 @@ public class Controller implements Initializable {
     @FXML
     private NumberAxis y;
     @FXML
-    private TableView table;
+    private TableView<Detector> table;
     @FXML
     private TableColumn<Detector, String> timeof;
     @FXML
@@ -114,24 +122,78 @@ public class Controller implements Initializable {
         hc05send.start();
     }
 
+    public void startData1(){
+        HC05button hc05button = new HC05button();
+        dataButton[0]=0x01;
+        dataButton[1]=0;
+        dataButton[2]=0;
+        hc05button.start();
+    }
+
+    public void startData2(){
+        HC05button hc05button = new HC05button();
+        dataButton[0]=0x02;
+        dataButton[1]=0;
+        dataButton[2]=0;
+        hc05button.start();
+    }
+
+    public void stopData(){
+        HC05button hc05button = new HC05button();
+        dataButton[0]=0x05;
+        dataButton[1]=0;
+        dataButton[2]=0;
+        hc05button.start();
+    }
+
+    public void diagramOFF(){
+        HC05button hc05button = new HC05button();
+        dataButton[0]=0x04;
+        dataButton[1]=0;
+        dataButton[2]=0;
+        hc05button.start();
+    }
+
+    @FXML
+    public void diagramON() {
+
+        HC05button hc05button = new HC05button();
+        dataButton[0]=0x03;
+        dataButton[1]=0;
+        dataButton[2]=0;
+        hc05button.start();
+
+        series1 = new XYChart.Series();
+        series1.setName("Czujnik 1");
+        series2 = new XYChart.Series();
+        series2.setName("Sharp 1");
+        series3 = new XYChart.Series();
+        series3.setName("Sharp 2");
+        series4 = new XYChart.Series();
+        series4.setName("Sharp 3");
+        series5 = new XYChart.Series();
+        series5.setName("Czujnik 1");
+        series6 = new XYChart.Series();
+        series6.setName("Sharp 1");
+        series7 = new XYChart.Series();
+        series7.setName("Sharp 2");
+        series8 = new XYChart.Series();
+        series8.setName("Sharp 3");
+        chart.getData().addAll(series1,series2,series3,series4,series5,series6,series7,series8);
+
+        Thread thread2 = new Thread(new DataThread());
+        thread2.start();
+    }
+
+
     //Test
     @FXML
     public void showTestData() {
 
-        series = new XYChart.Series();
-        chart.getData().addAll(series);
+        series1 = new XYChart.Series();
+        chart.getData().addAll(series1);
 
         Thread thread2 = new Thread(new TestDataThread());
-        thread2.start();
-    }
-
-    @FXML
-    public void getData() {
-
-        series = new XYChart.Series();
-        chart.getData().addAll(series);
-
-        Thread thread2 = new Thread(new DataThread());
         thread2.start();
     }
 
@@ -156,10 +218,41 @@ public class Controller implements Initializable {
 
                 Platform.runLater(() -> {
 
-                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
-                    if (series.getData().size() > 10) {
-                        series.getData().remove(0, 1);
+                    series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
+                    series2.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+2)));
+                    series3.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+4)));
+                    series4.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+6)));
+                    series5.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+8)));
+                    series6.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+10)));
+                    series7.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+12)));
+                    series8.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+14)));
+
+
+                    if (series1.getData().size() > 10) {
+                        series1.getData().remove(0, 1);
                     }
+                    if (series2.getData().size() > 10) {
+                        series2.getData().remove(0, 1);
+                    }
+                    if (series3.getData().size() > 10) {
+                        series3.getData().remove(0, 1);
+                    }
+                    if (series4.getData().size() > 10) {
+                        series4.getData().remove(0, 1);
+                    }
+                    if (series5.getData().size() > 10) {
+                        series5.getData().remove(0, 1);
+                    }
+                    if (series6.getData().size() > 10) {
+                        series6.getData().remove(0, 1);
+                    }
+                    if (series7.getData().size() > 10) {
+                        series7.getData().remove(0, 1);
+                    }
+                    if (series8.getData().size() > 10) {
+                        series8.getData().remove(0, 1);
+                    }
+
 
                     list.add(String.valueOf(hc05.getData().get(i)+"\t"+String.valueOf(timeSeconds)));
                     ArrayList<Detector> lista = new ArrayList<Detector>();
@@ -179,7 +272,6 @@ public class Controller implements Initializable {
                             new PropertyValueFactory<Detector, String>("time")
                     );
                     table.itemsProperty().setValue(dane);
-                    i++;
                 });
                 try {
                     Thread.sleep(1000);
@@ -209,9 +301,9 @@ public class Controller implements Initializable {
                 hc05.drawTestData();
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 Platform.runLater(() -> {
-                    series.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
-                    if (series.getData().size() > 10) {
-                        series.getData().remove(0, 1);
+                    series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
+                    if (series1.getData().size() > 10) {
+                        series1.getData().remove(0, 1);
                     }
 
                     list.add(String.valueOf(hc05.getData().get(i)+"\t"+String.valueOf(timeSeconds)));
@@ -233,6 +325,7 @@ public class Controller implements Initializable {
                     );
                     table.itemsProperty().setValue(dane);
                     i++;
+                    System.out.println(time);
                 });
                 try {
                     Thread.sleep(1000);
@@ -242,6 +335,7 @@ public class Controller implements Initializable {
                 endingTime = System.currentTimeMillis();
 
                 time += endingTime - currentTime;
+
             }
         }
     }
@@ -326,4 +420,16 @@ public class Controller implements Initializable {
         }
     }
 
+
+    public class HC05button extends Thread{
+        public void run(){
+            isRunning=true;
+            try {
+                hc05.send1(dataButton);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            isRunning=false;
+        }
+    }
 }
