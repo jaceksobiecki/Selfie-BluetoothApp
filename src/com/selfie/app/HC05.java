@@ -90,11 +90,12 @@ data.clear();
         DataInputStream disReader = new DataInputStream(is);
             if(is.available()>0) {
 
-                for(int i=0;i<16;i++){
-                    byte read = disReader.readByte();
-                    System.out.println(read);
-                    data.add(Integer.valueOf(read));
-                }
+                    for (int i = 0; i < 8; i++) {
+                        int read1 = disReader.readUnsignedShort();
+                        System.out.println(read1);
+                        data.add(Integer.valueOf(read1));
+                    }
+
 
             }
         System.out.println(data);

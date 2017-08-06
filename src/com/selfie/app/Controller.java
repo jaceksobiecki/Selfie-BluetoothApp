@@ -219,13 +219,13 @@ public class Controller implements Initializable {
                 Platform.runLater(() -> {
 
                     series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
-                    series2.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+2)));
-                    series3.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+4)));
-                    series4.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+6)));
-                    series5.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+8)));
-                    series6.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+10)));
-                    series7.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+12)));
-                    series8.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+14)));
+                    series2.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+1)));
+                    series3.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+2)));
+                    series4.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+3)));
+                    series5.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+4)));
+                    series6.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+5)));
+                    series7.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+6)));
+                    series8.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+7)));
 
 
                     if (series1.getData().size() > 10) {

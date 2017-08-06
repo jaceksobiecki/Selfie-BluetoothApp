@@ -1,153 +1,45 @@
-
-#include <NewPing.h>
-#include <AFMotor.h>
 #include <SoftwareSerial.h>
 SoftwareSerial BTserial(0, 1); // RX | TX
 
-#define TRIG_PIN A0
-#define ECHO_PIN A4
-#define MAX_DISTANCE 200
-#define COLL_DIST 20
-NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
-
-AF_DCMotor motor1(1);
-AF_DCMotor motor2(2);
-int speedSet = 0;
-
-#define pwm2 3
-#define kier2a 4
-#define kier2b 2
-#define pwm1 6
-#define kier1a 7
-#define kier1b 8
-
 byte reader;
 byte receive[2];
-byte bytes[31];
-byte a=33;
-byte b=44;
+byte bytes[16];
 long OnTime1 = 1000;
-byte i=12;
+unsigned long previousMillis1 = 0; 
 
-unsigned long previousMillis1 = 0;
-unsigned long previousMillis2 = 0;
-unsigned long previousMillis3 = 0;
-unsigned long previousMillis4 = 0;
-unsigned long previousMillis5 = 0;
-
-
-
-
-void setup()
-{
-
+void setup() {
   Serial.begin(9600);
   BTserial.begin(9600);
 }
 
-void loop(){
-        unsigned long currentMillis1 = millis();
-        unsigned long currentMillis2 = millis();
-        unsigned long currentMillis3 = millis();
-        unsigned long currentMillis4 = millis();
-        unsigned long currentMillis5 = millis();
+void loop() {
+ 
+  unsigned long currentMillis1 = millis();
 
-        if (BTserial.available()>0)
-        {
-          for(int i=0; i<3; i++){
-            reader = BTserial.read();
-            receive[i]=reader;
-            Serial.println(receive[i]);
-          }
-        }
-
-
-      if(currentMillis1 - previousMillis1 >= OnTime1)
-      {
-        if(receive[0]==1){
-              motor1.setSpeed(180);
-              motor2.setSpeed(180);
-              motor1.run(RELEASE);
-              motor2.run(RELEASE);
-        }previousMillis1 = currentMillis1;
-      }
-
-      if(currentMillis2 - previousMillis2 >= OnTime1)
-      {
-
-        if(receive[0]==2){
-              motor1.setSpeed(180);
-              motor2.setSpeed(180);
-              motor1.run(FORWARD);
-              motor2.run(FORWARD);
-        }previousMillis2 = currentMillis2;
-      }
-
-      if(currentMillis3 - previousMillis3 >= OnTime1)
+  receive[0]=3;
+      
+         if(currentMillis1 - previousMillis1 >= OnTime1)
       {
         if(receive[0]==3){
-            bytes[0]=b;
+            bytes[0]=highByte(1200);
+            bytes[1]=lowByte(1200);
+            bytes[2]=highByte(1200);
+            bytes[3]=lowByte(1200);
+            bytes[4]=highByte(1200);
+            bytes[5]=lowByte(1200);
+            bytes[6]=highByte(1200);
+            bytes[7]=lowByte(1200);
+            bytes[8]=highByte(1200);
+            bytes[9]=lowByte(1200);
+            bytes[10]=highByte(1200);
+            bytes[11]=lowByte(1200);
+            bytes[12]=highByte(1200);
+            bytes[13]=lowByte(1200);
+            bytes[14]=highByte(1200);
+            bytes[15]=lowByte(1200);
 
-            bytes[1]=a;
-
-            bytes[2]=b;
-
-            bytes[3]=a;
-
-            bytes[4]=i;
-
-            bytes[5]=a;
-
-            bytes[6]=b;
-
-            bytes[7]=a;
-
-            bytes[8]=b;
-
-            bytes[9]=99;
-
-            bytes[10]=b;
-
-            bytes[11]=a;
-
-            bytes[12]=b;
-
-            bytes[13]=a;
-
-            bytes[14]=b;
-
-            bytes[15]=a;
-
-
-
-                  Serial.write(bytes,16);
-
-
-
-
-          }previousMillis3 = currentMillis3;
-
-         }
-               if(currentMillis4 - previousMillis4 >= OnTime1)
-      {
-        if(receive[0]==4){
-
-        }previousMillis4 = currentMillis4;
-      }
-
-      if(currentMillis5 - previousMillis5 >= OnTime1)
-      {
-        if(receive[0]==5){
-          motor1.setSpeed(0);
-          motor2.setSpeed(0);
-        }previousMillis5 = currentMillis5;
-      }
-
-
-}
-byte readPing() {
-  delay(70);
-  unsigned int uS = sonar.ping();
-  int cm = uS / US_ROUNDTRIP_CM;
-  return cm;
+            Serial.write(bytes,16);
+          }
+          previousMillis1 = currentMillis1;
+        }
 }
