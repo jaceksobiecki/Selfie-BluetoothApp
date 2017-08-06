@@ -4,46 +4,13 @@
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="626.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.selfie.app.Controller">
     <children>
-        <Button fx:id="up" layoutY="80.0" mnemonicParsing="false" onAction="#up" prefHeight="40.0" prefWidth="40.0" text="up" AnchorPane.leftAnchor="209.0">
-            <font>
-                <Font size="10.0" />
-            </font></Button>
-        <Slider fx:id="slider" layoutX="53.0" layoutY="63.0" max="200.0" orientation="VERTICAL" prefHeight="211.0" prefWidth="57.0" showTickLabels="true" showTickMarks="true" value="100.0" />
-        <Button layoutX="209.0" layoutY="175.0" mnemonicParsing="false" onAction="#down" prefHeight="40.0" prefWidth="40.0" text="down">
-            <font>
-                <Font size="10.0" />
-            </font>
-        </Button>
-        <Button fx:id="stopBtn" layoutX="209.0" layoutY="128.0" mnemonicParsing="false" onAction="#stop" prefHeight="40.0" prefWidth="40.0" text="stop" AnchorPane.topAnchor="128.0">
-            <font>
-                <Font size="10.0" />
-            </font>
-        </Button>
-        <Button layoutX="160.0" layoutY="128.0" mnemonicParsing="false" onAction="#left" prefHeight="40.0" prefWidth="40.0" text="left">
-            <font>
-                <Font size="10.0" />
-            </font>
-        </Button>
-        <Button layoutX="256.0" layoutY="128.0" mnemonicParsing="false" onAction="#right" prefHeight="40.0" prefWidth="40.0" text="right">
-            <font>
-                <Font size="10.0" />
-            </font>
-        </Button>
-        <Label layoutX="53.0" layoutY="35.0" text="Speed:" />
-        <Label layoutX="206.0" layoutY="35.0" text="Steering:" />
       <AreaChart fx:id="chart" animated="false" createSymbols="false" layoutX="12.0" layoutY="287.0" prefHeight="308.0" prefWidth="707.0" title="Data">
         <xAxis>
           <CategoryAxis animated="false" endMargin="0.0" label="time[sec]" pickOnBounds="false" side="BOTTOM" startMargin="0.0" fx:id="x" />
@@ -52,7 +19,7 @@
           <NumberAxis fx:id="y" animated="false" autoRanging="false" label="data" side="LEFT" upperBound="200.0" />
         </yAxis>
       </AreaChart>
-      <Button fx:id="show" layoutX="341.0" layoutY="144.0" mnemonicParsing="false" onAction="#showTestData" prefHeight="27.0" prefWidth="120.0" text="Test Data" />
+      <Button fx:id="show" layoutX="339.0" layoutY="77.0" mnemonicParsing="false" onAction="#showTestData" prefHeight="27.0" prefWidth="120.0" text="Test Data" />
       <TableView fx:id="table" layoutX="495.0" layoutY="30.0" prefHeight="281.0" prefWidth="207.0">
         <columns>
           <TableColumn fx:id="valueof" prefWidth="100.0" text="Value" />
@@ -61,14 +28,12 @@
       </TableView>
       <Separator layoutX="134.0" layoutY="57.0" orientation="VERTICAL" prefHeight="200.0" />
       <Separator layoutX="314.0" layoutY="57.0" orientation="VERTICAL" prefHeight="200.0" />
-      <TextField fx:id="textField" layoutX="151.0" layoutY="230.0" prefHeight="27.0" prefWidth="147.0" promptText="send int" />
-      <Button fx:id="sendBtn" layoutX="195.0" layoutY="261.0" mnemonicParsing="false" onAction="#sendBtn" text="Send" />
-      <Button layoutX="151.0" layoutY="57.0" mnemonicParsing="false" onAction="#info" prefHeight="27.0" prefWidth="43.0" text="info" />
-      <Button layoutX="375.0" layoutY="183.0" mnemonicParsing="false" onAction="#startData1" text="start1" />
-      <Button layoutX="375.0" layoutY="218.0" mnemonicParsing="false" onAction="#startData2" text="start2" />
-      <Button layoutX="375.0" layoutY="249.0" mnemonicParsing="false" onAction="#stopData" text="stop" />
-      <Button layoutX="427.0" layoutY="218.0" mnemonicParsing="false" onAction="#diagramON" text="diag on" />
-      <Button layoutX="430.0" layoutY="249.0" mnemonicParsing="false" onAction="#diagramOFF" text="diag off" />
+      <Button layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#info" prefHeight="27.0" prefWidth="43.0" text="info" />
+      <Button layoutX="181.0" layoutY="77.0" mnemonicParsing="false" onAction="#startData1" prefHeight="27.0" prefWidth="86.0" text="start1" />
+      <Button layoutX="181.0" layoutY="124.0" mnemonicParsing="false" onAction="#startData2" prefHeight="27.0" prefWidth="86.0" text="start2" />
+      <Button layoutX="181.0" layoutY="171.0" mnemonicParsing="false" onAction="#stopData" prefHeight="27.0" prefWidth="86.0" text="stop" />
+      <Button layoutX="337.0" layoutY="124.0" mnemonicParsing="false" onAction="#diagramON" prefHeight="27.0" prefWidth="120.0" text="Diag on" />
+      <Button layoutX="337.0" layoutY="171.0" mnemonicParsing="false" onAction="#diagramOFF" prefHeight="27.0" prefWidth="120.0" text="Diag off" />
 
           </children>
 </AnchorPane>

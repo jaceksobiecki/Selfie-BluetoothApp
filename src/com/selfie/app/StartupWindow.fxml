@@ -7,6 +7,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="anchorPane" prefHeight="452.0" prefWidth="376.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.selfie.app.StartupController">
    <children>
@@ -21,5 +22,10 @@
          </image>
       </ImageView>
       <ProgressBar fx:id="progressBar" layoutX="44.0" layoutY="332.0" prefHeight="17.0" prefWidth="301.0" visible="false" />
+      <Button layoutX="22.0" layoutY="29.0" mnemonicParsing="false" onAction="#bypass" text="dev">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

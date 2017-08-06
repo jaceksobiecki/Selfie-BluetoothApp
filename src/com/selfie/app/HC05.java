@@ -10,16 +10,16 @@ import java.util.Random;
 /**
  * Connects to HC-05 bluetooth module
  */
-public class HC05{
+public class HC05 {
     private static OutputStream os;
     private static StreamConnection streamConnection;
     private static InputStream is;
-    private static int i=0;
+    private static int i = 0;
     private static ArrayList<Integer> data = new ArrayList<>();
     private static ArrayList<String> devices = new ArrayList<>();
+    private static String hc05Url;
+    private static String URL;
     boolean scanFinished = false;
-    RemoteDevice hc05device;
-    char[] bytes=new char[32];
     //set your hc05Url
 
     //Bt Piotrek
@@ -28,24 +28,29 @@ public class HC05{
     //private static String hc05Url = "btspp://301412260760:1;authenticate=false;encrypt=false;master=false";
     //Bt Team 1
     //private static String hc05Url = "btspp://98D33380730A:1;authenticate=false;encrypt=false;master=false";
-
-    private static String hc05Url;
-    private static String URL;
-
-    public ArrayList<String> getDevices() {
-        return devices;
-    }
+    RemoteDevice hc05device;
+    char[] bytes = new char[32];
 
     public static String getURL() {
         return URL;
+    }
+
+    public static void setURL(String URL) {
+        HC05.URL = URL;
     }
 
     public static String getHc05Url() {
         return hc05Url;
     }
 
-    public static void setURL(String URL) {
-        HC05.URL = URL;
+    public static void close() throws IOException {
+        os.close();
+        is.close();
+        streamConnection.close();
+    }
+
+    public ArrayList<String> getDevices() {
+        return devices;
     }
 
     public ArrayList<Integer> getData() {
@@ -54,17 +59,17 @@ public class HC05{
 
     public void readUrl() throws IOException {
         BufferedReader in = new BufferedReader(new FileReader("Url.txt"));
-        URL=in.readLine();
+        URL = in.readLine();
     }
 
-    public void go(){
+    public void go() {
         System.out.println("Connecting");
         try {
             streamConnection = (StreamConnection) Connector.open(URL);
             os = streamConnection.openOutputStream();
             is = streamConnection.openInputStream();
             System.out.println("Connected to " + URL);
-        } catch(Exception e){
+        } catch (Exception e) {
             StartupController.setProblem(true);
             StartupController.setInfo("Can't connect");
         }
@@ -74,43 +79,39 @@ public class HC05{
         os.write(a);
     }
 
-    public void send1(byte[] a) throws Exception {
-        os.write(a,0,3);
+    public void send(byte[] a) throws Exception {
+        os.write(a, 0, 3);
     }
 
-    public static void close() throws IOException {
-        os.close();
-        is.close();
-        streamConnection.close();
-    }
-    public void getValueOfDetector() throws IOException {
-data.clear();
+    public void recieveData() throws IOException {
+        data.clear();
         //zczytywanie danych z czujnika, zamiana na int
 
         DataInputStream disReader = new DataInputStream(is);
-            if(is.available()>0) {
+        if (is.available() > 0) {
 
-                    for (int i = 0; i < 8; i++) {
-                        int read1 = disReader.readUnsignedShort();
-                        System.out.println(read1);
-                        data.add(Integer.valueOf(read1));
-                    }
-
-
+            for (int i = 0; i < 8; i++) {
+                int read1 = disReader.readUnsignedShort();
+                System.out.println(read1);
+                data.add(Integer.valueOf(read1));
             }
+
+
+        }
         System.out.println(data);
 
 
-            System.out.println("wartosc");
+        System.out.println("wartosc");
 
         //zapisanie wartosci w tablicy
     }
+
     //Test
-    public void drawTestData(){
+    public void drawTestData() {
         data.add(new Random().nextInt(200));
     }
 
-    public void search() throws Exception{
+    public void search() throws Exception {
         //scan for all devices:
         System.out.println("searching for devices");
         scanFinished = false;
@@ -184,10 +185,10 @@ data.clear();
                 Thread.sleep(500);
             }
 
-        System.out.println(hc05device.getBluetoothAddress());
-        System.out.println(hc05Url);
-        System.out.println(devices);
-        }catch(NullPointerException e){
+            System.out.println(hc05device.getBluetoothAddress());
+            System.out.println(hc05Url);
+            System.out.println(devices);
+        } catch (NullPointerException e) {
             devices.add("No devices found");
         }
     }

@@ -102,6 +102,15 @@ public class StartupController implements Initializable {
         }
     }
 
+    @FXML
+    public void bypass(){
+        try {
+            newWindow();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void connect() throws IOException, InterruptedException {
         //hc05Search.kill();
         hc05Search.stop();
