@@ -17,8 +17,9 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Controller implements Initializable {
-    private byte[] frame =new byte[3];
+    private byte[] frame =new byte[5];
     private boolean isRunning=false;
+    byte data;
 
     @FXML
     private AreaChart<?, ?> chart;
@@ -48,11 +49,27 @@ public class Controller implements Initializable {
     private HC05 hc05 = new HC05();
     ArrayList<String> list = new ArrayList<String>();
 
+    @FXML
+    private void test(){
+        data=0x30;
+        TestSend testSend = new TestSend();
+        testSend.start();
+
+        System.out.println(data);
+    }
+    @FXML
+    private void testReceive(){
+        TestReceive testReceive = new TestReceive();
+        testReceive.start();
+    }
+
     public void startData1(){
         HC05send hc05Send = new HC05send();
-        frame[0]=0x01;
-        frame[1]=0;
-        frame[2]=0;
+        frame[1]=0x25;
+        frame[2]=0x25;
+        frame[3]=0x25;
+        frame[0]=0x25;
+        frame[4]=0x25;
         hc05Send.start();
     }
 
@@ -136,7 +153,7 @@ public class Controller implements Initializable {
             while (true) {
                 currentTime = System.currentTimeMillis();
                 try {
-                    hc05.recieveData();
+                    hc05.receiveData();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -283,6 +300,33 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
             isRunning=false;
+        }
+    }
+
+    public class TestSend extends Thread{
+        public void run(){
+            try {
+                hc05.send(data);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class TestReceive extends Thread{
+        public void run() {
+            while (true) {
+                try {
+                    hc05.receiveData();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

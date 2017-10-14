@@ -80,17 +80,31 @@ public class HC05 {
     }
 
     public void send(byte[] a) throws Exception {
-        os.write(a, 0, 3);
+        os.write(a, 0, 5);
+
     }
 
-    public void recieveData() throws IOException {
+    public void receiveData() throws IOException {
+/*
+        //zczytywanie danych z czujnika, zamiana na int
+        BufferedReader bReader = new BufferedReader(new InputStreamReader(is));
+        char[] frame = new char[34];
+        bReader.read(frame, 0, 34);
+        System.out.println("start");
+        for(int i=0;i<34;i++){
+            byte a=(byte) 0x10;
+            System.out.println(Integer.toHexString(frame[i]));
+        }
+        System.out.println("koniec");
+
+        */
         data.clear();
         //zczytywanie danych z czujnika, zamiana na int
 
         DataInputStream disReader = new DataInputStream(is);
         if (is.available() > 0) {
 
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 16; i++) {
                 int read1 = disReader.readUnsignedShort();
                 System.out.println(read1);
                 data.add(Integer.valueOf(read1));
@@ -104,6 +118,7 @@ public class HC05 {
         System.out.println("wartosc");
 
         //zapisanie wartosci w tablicy
+
     }
 
     //Test

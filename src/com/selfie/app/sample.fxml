@@ -34,6 +34,8 @@
       <Button layoutX="181.0" layoutY="171.0" mnemonicParsing="false" onAction="#stopData" prefHeight="27.0" prefWidth="86.0" text="stop" />
       <Button layoutX="337.0" layoutY="124.0" mnemonicParsing="false" onAction="#diagramON" prefHeight="27.0" prefWidth="120.0" text="Diag on" />
       <Button layoutX="337.0" layoutY="171.0" mnemonicParsing="false" onAction="#diagramOFF" prefHeight="27.0" prefWidth="120.0" text="Diag off" />
+      <Button layoutX="36.0" layoutY="138.0" mnemonicParsing="false" onAction="#test" text="test send" />
+      <Button layoutX="29.0" layoutY="185.0" mnemonicParsing="false" onAction="#testReceive" text="test receive" />
 
           </children>
 </AnchorPane>
