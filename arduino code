@@ -1,45 +1,52 @@
 #include <SoftwareSerial.h>
-SoftwareSerial BTserial(0, 1); // RX | TX
+SoftwareSerial BTSerial(10, 11); // RX | TX
 
-byte reader;
-byte receive[2];
-byte bytes[16];
-long OnTime1 = 1000;
-unsigned long previousMillis1 = 0; 
+int data[5];
+byte sendData[34];
+long onTime = 1000;
+unsigned long previousMillis = 0;
+
+short liczba = 377;
+
+
+
 
 void setup() {
   Serial.begin(9600);
-  BTserial.begin(9600);
+  BTSerial.begin(9600);
+  Serial.println("Serial started");
+
+  for (int i = 0; i < 34; i+=2) {
+    sendData[i] = highByte(liczba);
+    sendData[i+1] = lowByte(liczba);
+  }
+  
 }
 
 void loop() {
- 
-  unsigned long currentMillis1 = millis();
 
-  receive[0]=3;
-      
-         if(currentMillis1 - previousMillis1 >= OnTime1)
-      {
-        if(receive[0]==3){
-            bytes[0]=highByte(1200);
-            bytes[1]=lowByte(1200);
-            bytes[2]=highByte(1200);
-            bytes[3]=lowByte(1200);
-            bytes[4]=highByte(1200);
-            bytes[5]=lowByte(1200);
-            bytes[6]=highByte(1200);
-            bytes[7]=lowByte(1200);
-            bytes[8]=highByte(1200);
-            bytes[9]=lowByte(1200);
-            bytes[10]=highByte(1200);
-            bytes[11]=lowByte(1200);
-            bytes[12]=highByte(1200);
-            bytes[13]=lowByte(1200);
-            bytes[14]=highByte(1200);
-            bytes[15]=lowByte(1200);
+  if (BTSerial.available())
+  {
+    for (int i = 0; i < 5; i++) {
+      data[i] = BTSerial.read();
+      Serial.println(data[i]);
+    }
+  }
+ /*
+  if(data[0]==37){
+    Serial.write(sendData, 34);
+  }
+  */
 
-            Serial.write(bytes,16);
-          }
-          previousMillis1 = currentMillis1;
-        }
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= onTime) {
+    //Serial.write(sendData, 34);
+    Serial.println("dane do wyalania:");
+    for(int i =0; i<34; i++){
+      Serial.println(sendData[i]);
+    }
+    BTSerial.write(sendData, 34);
+    previousMillis = currentMillis;
+  }
+
 }
