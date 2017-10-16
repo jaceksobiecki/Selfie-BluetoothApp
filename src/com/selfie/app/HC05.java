@@ -103,12 +103,14 @@ public class HC05 {
 
         DataInputStream disReader = new DataInputStream(is);
         if (is.available() > 0) {
-
-            for (int i = 0; i < 16; i++) {
-                int read1 = disReader.readUnsignedShort();
-                System.out.println(read1);
-                data.add(Integer.valueOf(read1));
+            if(disReader.readByte()==0){
+                for (int i = 1; i < 17; i++) {
+                    int read1 = disReader.readUnsignedShort();
+                    System.out.println(read1);
+                    data.add(Integer.valueOf(read1));
+                }
             }
+
 
 
         }
