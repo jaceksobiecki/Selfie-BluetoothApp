@@ -17,9 +17,9 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Controller implements Initializable {
-    private byte[] frame =new byte[5];
+    private byte[] frame =new byte[4];
     private boolean isRunning=false;
-    byte data;
+    Receive receive = new Receive();
 
     @FXML
     private AreaChart<?, ?> chart;
@@ -49,83 +49,50 @@ public class Controller implements Initializable {
     private HC05 hc05 = new HC05();
     ArrayList<String> list = new ArrayList<String>();
 
-    @FXML
-    private void test(){
-        data=0x30;
-        TestSend testSend = new TestSend();
-        testSend.start();
-
-        System.out.println(data);
-    }
-    @FXML
-    private void testReceive(){
-        TestReceive testReceive = new TestReceive();
-        testReceive.start();
-    }
-
-    public void startData1(){
+    public void start(){
         HC05send hc05Send = new HC05send();
-        frame[1]=0x25;
-        frame[2]=0x25;
-        frame[3]=0x25;
-        frame[0]=0x25;
-        frame[4]=0x25;
-        hc05Send.start();
-    }
-
-    public void startData2(){
-        HC05send hc05Send = new HC05send();
-        frame[0]=0x02;
+        frame[0]=100;
         frame[1]=0;
         frame[2]=0;
         hc05Send.start();
+        try {
+            hc05.receiveData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void stopData(){
+    public void stop(){
         HC05send hc05Send = new HC05send();
-        frame[0]=0x05;
+        frame[0]=(byte)200;
         frame[1]=0;
         frame[2]=0;
         hc05Send.start();
+        try {
+            hc05.receiveData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void diagramOFF(){
+    public void diagOFF(){
         HC05send hc05Send = new HC05send();
-        frame[0]=0x04;
+        frame[0]=111;
         frame[1]=0;
         frame[2]=0;
         hc05Send.start();
+        receive.off();
     }
 
     @FXML
-    public void diagramON() {
-
+    public void diagON() {
         HC05send hc05Send = new HC05send();
-        frame[0]=0x03;
+        frame[0]=110;
         frame[1]=0;
         frame[2]=0;
         hc05Send.start();
+        receive.on();
 
-        series1 = new XYChart.Series();
-        series1.setName("Czujnik 1");
-        series2 = new XYChart.Series();
-        series2.setName("Sharp 1");
-        series3 = new XYChart.Series();
-        series3.setName("Sharp 2");
-        series4 = new XYChart.Series();
-        series4.setName("Sharp 3");
-        series5 = new XYChart.Series();
-        series5.setName("Czujnik 1");
-        series6 = new XYChart.Series();
-        series6.setName("Sharp 1");
-        series7 = new XYChart.Series();
-        series7.setName("Sharp 2");
-        series8 = new XYChart.Series();
-        series8.setName("Sharp 3");
-        chart.getData().addAll(series1,series2,series3,series4,series5,series6,series7,series8);
-
-        Thread thread2 = new Thread(new DataThread());
-        thread2.start();
     }
 
 
@@ -287,7 +254,8 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        receive.start();
+        frame[3]=11;
     }
 
 
@@ -303,28 +271,30 @@ public class Controller implements Initializable {
         }
     }
 
-    public class TestSend extends Thread{
-        public void run(){
-            try {
-                hc05.send(data);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
-    public class TestReceive extends Thread{
+    public class Receive extends Thread{
+        private volatile boolean running = false;
+
+        public void off() {
+            running = false;
+        }
+        public void on(){
+            running = true;
+        }
+
         public void run() {
             while (true) {
-                try {
-                    hc05.receiveData();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                while (running) {
+                    try {
+                        hc05.receiveData();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

@@ -80,53 +80,25 @@ public class HC05 {
     }
 
     public void send(byte[] a) throws Exception {
-        os.write(a, 0, 5);
+        os.write(a, 0, 4);
 
     }
 
     public void receiveData() throws IOException {
-/*
-        //zczytywanie danych z czujnika, zamiana na int
-        BufferedReader bReader = new BufferedReader(new InputStreamReader(is));
-        char[] frame = new char[34];
-        bReader.read(frame, 0, 34);
-        System.out.println("start");
-        for(int i=0;i<34;i++){
-            byte a=(byte) 0x10;
-            System.out.println(Integer.toHexString(frame[i]));
-        }
-        System.out.println("koniec");
-
-        */
         data.clear();
-        //zczytywanie danych z czujnika, zamiana na int
-
         DataInputStream disReader = new DataInputStream(is);
         if (is.available() > 0) {
-            if(disReader.readByte()==0){
-                System.out.println(0);
-                for (int i = 1; i < 17; i++) {
-                    int read1 = disReader.readUnsignedShort();
-
-                    System.out.println(read1);
-                    data.add(Integer.valueOf(read1));
-                }
-
+            for(int i=0; i<4;i++) {
+                data.add(Integer.valueOf(disReader.readUnsignedByte()));
             }
-            if(disReader.readByte()==1){
-                System.out.println(1);
-            }
-
-
-
         }
         System.out.println(data);
-
-
-        System.out.println("wartosc");
-
-        //zapisanie wartosci w tablicy
-
+        /*
+        if(data.get(0)==100)
+            System.out.println("STM READY");
+        else if(data.get(0)==200)
+            System.out.println("STM STOPPED");
+            */
     }
 
     //Test
