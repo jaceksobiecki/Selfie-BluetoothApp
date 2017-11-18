@@ -15,11 +15,15 @@ public class HC05 {
     private static StreamConnection streamConnection;
     private static InputStream is;
     private static int i = 0;
-    private static ArrayList<Integer> data = new ArrayList<>();
+    private short[] j_bufferR = new short[14];
+    private byte[] rFlag = new byte[3];
+    private byte[] j_bufferS = new byte[14];
+    private static ArrayList<Short> rData = new ArrayList<>();
     private static ArrayList<String> devices = new ArrayList<>();
     private static String hc05Url;
     private static String URL;
     boolean scanFinished = false;
+    int syncByte;
     //set your hc05Url
 
     //Bt Piotrek
@@ -53,8 +57,8 @@ public class HC05 {
         return devices;
     }
 
-    public ArrayList<Integer> getData() {
-        return data;
+    public  ArrayList<Short> getData() {
+        return rData;
     }
 
     public void readUrl() throws IOException {
@@ -79,31 +83,60 @@ public class HC05 {
         os.write(a);
     }
 
-    public void send(byte[] a) throws Exception {
-        os.write(a, 0, 4);
+    public void send(byte[] sData1,byte[]sFlag) throws Exception {
+        j_bufferS[0] = (byte) ((sFlag[0])                           & 0xFF);
+        j_bufferS[1] = (byte) ((sData1[0])                          & 0xFF);
+        j_bufferS[2] = (byte) ((sData1[0]>>8 |sData1[1]<<3 )        & 0xFF);
+        j_bufferS[3] = (byte) ((sData1[1]>>5 |sData1[2]<<6)         & 0xFF);
+        j_bufferS[4] = (byte) ((sData1[2]>>2)                       & 0xFF);
+        j_bufferS[5] = (byte) ((sData1[3]<<1 |sData1[2]>>10)        & 0xFF);
+        j_bufferS[6] = (byte) ((sData1[4]<<4 |sData1[3]>>7)         & 0xFF);
+        j_bufferS[7] = (byte) ((sData1[5]<<7 |sData1[4]>>4)         & 0xFF);
+        j_bufferS[8] = (byte) ((sData1[5]>>1)                       & 0xFF);
+        j_bufferS[9] = (byte) ((sData1[6]<<2 |sData1[5]>>9)         & 0xFF);
+        j_bufferS[10] = (byte) ((sData1[7]<<5 |sData1[6]>>6)        & 0xFF);
+        j_bufferS[11] = (byte) ((sData1[7]>>3)                      & 0xFF);
+        j_bufferS[12] = (byte) ((sFlag[1])                          & 0xFF);
+        j_bufferS[13] = (byte) ((sFlag[2])                          & 0xFF);
+        os.write(j_bufferS, 0, 14);
 
     }
 
     public void receiveData() throws IOException {
-        data.clear();
         DataInputStream disReader = new DataInputStream(is);
         if (is.available() > 0) {
-            for(int i=0; i<4;i++) {
-                data.add(Integer.valueOf(disReader.readUnsignedByte()));
+            rFlag[0] =disReader.readByte();
+            if (rFlag[0] == 0xFF) {
+                syncByte = 0xFE;
+                for (int i = 0; i < 11; i++) {
+                    j_bufferR[i] = disReader.readByte();
+                }
             }
+            else if(syncByte==0xFE) {
+                rData.add((short) ((j_bufferR[0] | j_bufferR[1] << 8) & 0x7FF));
+                rData.add((short) ((j_bufferR[1] >> 3 | j_bufferR[2] << 5) & 0x7FF));
+                rData.add((short) ((j_bufferR[2] >> 6 | j_bufferR[3] << 2 | j_bufferR[4] << 10) & 0x7FF));
+                rData.add((short) ((j_bufferR[4] >> 1 | j_bufferR[5] << 7) & 0x7FF));
+                rData.add((short) ((j_bufferR[5] >> 4 | j_bufferR[6] << 4) & 0x7FF));
+                rData.add((short) ((j_bufferR[6] >> 7 | j_bufferR[7] << 1 | j_bufferR[8] << 9) & 0x7FF));
+                rData.add((short) ((j_bufferR[8] >> 2 | j_bufferR[9] << 6) & 0x7FF));
+                rData.add((short) ((j_bufferR[9] >> 5 | j_bufferR[10] << 3) & 0x7FF));
+
+                syncByte = 0xFD;
+                rFlag[1] = disReader.readByte();
+                rFlag[2] = disReader.readByte();
+
+                System.out.println(rData);
+
+            }
+
         }
-        System.out.println(data);
         /*
         if(data.get(0)==100)
             System.out.println("STM READY");
         else if(data.get(0)==200)
             System.out.println("STM STOPPED");
             */
-    }
-
-    //Test
-    public void drawTestData() {
-        data.add(new Random().nextInt(200));
     }
 
     public void search() throws Exception {

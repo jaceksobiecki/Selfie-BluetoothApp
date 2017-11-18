@@ -17,7 +17,8 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Controller implements Initializable {
-    private byte[] frame =new byte[4];
+    private byte[] frame =new byte[11];
+    private byte[] sFlag = new byte[3];
     private boolean isRunning=false;
     Receive receive = new Receive();
 
@@ -51,9 +52,20 @@ public class Controller implements Initializable {
 
     public void start(){
         HC05send hc05Send = new HC05send();
+        sFlag[0]= (byte) 0xFF;
         frame[0]=100;
         frame[1]=0;
         frame[2]=0;
+        frame[3]=100;
+        frame[4]=0;
+        frame[5]=0;
+        frame[6]=100;
+        frame[7]=0;
+        frame[8]=0;
+        frame[9]=100;
+        frame[10]=0;
+        sFlag[1]=0;
+        sFlag[2]=0x00;
         hc05Send.start();
         try {
             hc05.receiveData();
@@ -137,7 +149,6 @@ public class Controller implements Initializable {
                     series7.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+6)));
                     series8.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+7)));
 
-
                     if (series1.getData().size() > 10) {
                         series1.getData().remove(0, 1);
                     }
@@ -182,6 +193,8 @@ public class Controller implements Initializable {
                             new PropertyValueFactory<Detector, String>("time")
                     );
                     table.itemsProperty().setValue(dane);
+
+
                 });
                 try {
                     Thread.sleep(1000);
@@ -208,7 +221,7 @@ public class Controller implements Initializable {
 
             while (true) {
                 currentTime = System.currentTimeMillis();
-                hc05.drawTestData();
+              //  hc05.drawTestData();
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 Platform.runLater(() -> {
                     series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
@@ -263,7 +276,7 @@ public class Controller implements Initializable {
         public void run(){
             isRunning=true;
             try {
-                hc05.send(frame);
+                hc05.send(frame,sFlag);
             } catch (Exception e) {
                 e.printStackTrace();
             }
