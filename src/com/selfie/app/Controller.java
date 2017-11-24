@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Controller implements Initializable {
-    private byte[] frame =new byte[11];
+    private byte[] frame =new byte[8];
     private byte[] sFlag = new byte[3];
     private boolean isRunning=false;
     Receive receive = new Receive();
@@ -61,9 +61,6 @@ public class Controller implements Initializable {
         frame[5]=0;
         frame[6]=100;
         frame[7]=0;
-        frame[8]=0;
-        frame[9]=100;
-        frame[10]=0;
         sFlag[1]=0;
         sFlag[2]=0x00;
         hc05Send.start();
@@ -88,21 +85,11 @@ public class Controller implements Initializable {
     }
 
     public void diagOFF(){
-        HC05send hc05Send = new HC05send();
-        frame[0]=111;
-        frame[1]=0;
-        frame[2]=0;
-        hc05Send.start();
         receive.off();
     }
 
     @FXML
     public void diagON() {
-        HC05send hc05Send = new HC05send();
-        frame[0]=110;
-        frame[1]=0;
-        frame[2]=0;
-        hc05Send.start();
         receive.on();
 
     }
@@ -268,7 +255,6 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         receive.start();
-        frame[3]=11;
     }
 
 
@@ -304,7 +290,7 @@ public class Controller implements Initializable {
                         e.printStackTrace();
                     }
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

@@ -103,11 +103,13 @@ public class HC05 {
     }
 
     public void receiveData() throws IOException {
+        rData.clear();
         DataInputStream disReader = new DataInputStream(is);
         if (is.available() > 0) {
             rFlag[0] = disReader.readByte();
-            if (rFlag[0] == 0xFF) {
-                    syncByte = 0xFE;
+            System.out.println(rFlag[0]);
+            if (rFlag[0] == 120) {
+                System.out.println(1);
                     for (int i = 0; i < 11; i++) {
                         j_bufferR[i] = disReader.readByte();
                     }
@@ -120,39 +122,12 @@ public class HC05 {
                     rData.add((short) ((j_bufferR[8] >> 2 | j_bufferR[9] << 6) & 0x7FF));
                     rData.add((short) ((j_bufferR[9] >> 5 | j_bufferR[10] << 3) & 0x7FF));
 
-                    syncByte = 0xFD;
-                    rFlag[1] = disReader.readByte();
-                    rFlag[2] = disReader.readByte();
-
-                    System.out.println(rData);
-            }
-            else if (rFlag[0] == 0xFF) {
-                    syncByte = 0xFE;
-                    for (int i = 0; i < 11; i++) {
-                        j_bufferR[i] = disReader.readByte();
-                    }
-                    rData.add((short) ((j_bufferR[0] | j_bufferR[1] << 8) & 0x7FF));
-                    rData.add((short) ((j_bufferR[1] >> 3 | j_bufferR[2] << 5) & 0x7FF));
-                    rData.add((short) ((j_bufferR[2] >> 6 | j_bufferR[3] << 2 | j_bufferR[4] << 10) & 0x7FF));
-                    rData.add((short) ((j_bufferR[4] >> 1 | j_bufferR[5] << 7) & 0x7FF));
-                    rData.add((short) ((j_bufferR[5] >> 4 | j_bufferR[6] << 4) & 0x7FF));
-                    rData.add((short) ((j_bufferR[6] >> 7 | j_bufferR[7] << 1 | j_bufferR[8] << 9) & 0x7FF));
-                    rData.add((short) ((j_bufferR[8] >> 2 | j_bufferR[9] << 6) & 0x7FF));
-                    rData.add((short) ((j_bufferR[9] >> 5 | j_bufferR[10] << 3) & 0x7FF));
-
-                    syncByte = 0xFD;
                     rFlag[1] = disReader.readByte();
                     rFlag[2] = disReader.readByte();
 
                     System.out.println(rData);
             }
         }
-        /*
-        if(data.get(0)==100)
-            System.out.println("STM READY");
-        else if(data.get(0)==200)
-            System.out.println("STM STOPPED");
-            */
     }
 
     public void search() throws Exception {
@@ -166,7 +141,7 @@ public class HC05 {
                     String name = btDevice.getFriendlyName(false);
                     devices.add(name + "    " + btDevice.getBluetoothAddress());
                     System.out.format("%s (%s)\n", name, btDevice.getBluetoothAddress());
-                    if (name.matches("HC-05")) {
+                    if (name.matches("GUN.*")) {
                         hc05device = btDevice;
                         System.out.println("got it!");
                     }
