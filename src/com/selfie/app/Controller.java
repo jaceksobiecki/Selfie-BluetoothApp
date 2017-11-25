@@ -5,9 +5,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.PointLight;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 import java.io.*;
 import java.net.URL;
@@ -17,21 +20,40 @@ import java.util.concurrent.TimeUnit;
 
 
 public class Controller implements Initializable {
-    private byte[] frame =new byte[8];
+    private short[] frame =new short[8];
     private byte[] sFlag = new byte[3];
     private boolean isRunning=false;
     Receive receive = new Receive();
-
+    @FXML
+    private Circle light11;
+    @FXML
+    private Circle light12;
+    @FXML
+    private TextField velocity;
+    @FXML
+    private Label angle1;
+    @FXML
+    private Label angle2;
+    @FXML
+    private TextField label1;
+    @FXML
+    private TextField label2;
+    @FXML
+    private TextField label3;
+    @FXML
+    private TextField label4;
+    @FXML
+    private TextField label5;
+    @FXML
+    private TextField label6;
+    @FXML
+    private TextField label7;
+    @FXML
+    private TextField label8;
     @FXML
     private AreaChart<?, ?> chart;
     private XYChart.Series series1;
     private XYChart.Series series2;
-    private XYChart.Series series3;
-    private XYChart.Series series4;
-    private XYChart.Series series5;
-    private XYChart.Series series6;
-    private XYChart.Series series7;
-    private XYChart.Series series8;
     @FXML
     private TableView<Detector> table;
     @FXML
@@ -52,17 +74,17 @@ public class Controller implements Initializable {
 
     public void start(){
         HC05send hc05Send = new HC05send();
-        sFlag[0]= (byte) 0xFF;
-        frame[0]=100;
-        frame[1]=0;
-        frame[2]=0;
-        frame[3]=100;
-        frame[4]=0;
-        frame[5]=0;
-        frame[6]=100;
-        frame[7]=0;
+        sFlag[0]=0x01;
+        frame[0]=Short.valueOf(label1.getText());
+        frame[1]=Short.valueOf(label2.getText());
+        frame[2]=Short.valueOf(label3.getText());
+        frame[3]=Short.valueOf(label4.getText());
+        frame[4]=Short.valueOf(label5.getText());
+        frame[5]=Short.valueOf(label6.getText());
+        frame[6]=Short.valueOf(label7.getText());
+        frame[7]=Short.valueOf(label8.getText());
         sFlag[1]=0;
-        sFlag[2]=0x00;
+        sFlag[2]=0x01;
         hc05Send.start();
         try {
             hc05.receiveData();
@@ -71,6 +93,19 @@ public class Controller implements Initializable {
         }
     }
 
+    public void send(){
+        sFlag[0]=0x01;
+        frame[0]=Short.valueOf(label1.getText());
+        frame[1]=Short.valueOf(label2.getText());
+        frame[2]=Short.valueOf(label3.getText());
+        frame[3]=Short.valueOf(label4.getText());
+        frame[4]=Short.valueOf(label5.getText());
+        frame[5]=Short.valueOf(label6.getText());
+        frame[6]=Short.valueOf(label7.getText());
+        frame[7]=Short.valueOf(label8.getText());
+        sFlag[1]=0;
+        sFlag[2]=0x01;
+    }
     public void stop(){
         HC05send hc05Send = new HC05send();
         frame[0]=(byte)200;
@@ -126,15 +161,8 @@ public class Controller implements Initializable {
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
 
                 Platform.runLater(() -> {
-
+                    series2.getData().add(new XYChart.Data(String.valueOf(timeSeconds), 1000));
                     series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
-                    series2.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+1)));
-                    series3.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+2)));
-                    series4.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+3)));
-                    series5.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+4)));
-                    series6.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+5)));
-                    series7.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+6)));
-                    series8.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i+7)));
 
                     if (series1.getData().size() > 10) {
                         series1.getData().remove(0, 1);
@@ -142,26 +170,23 @@ public class Controller implements Initializable {
                     if (series2.getData().size() > 10) {
                         series2.getData().remove(0, 1);
                     }
-                    if (series3.getData().size() > 10) {
-                        series3.getData().remove(0, 1);
-                    }
-                    if (series4.getData().size() > 10) {
-                        series4.getData().remove(0, 1);
-                    }
-                    if (series5.getData().size() > 10) {
-                        series5.getData().remove(0, 1);
-                    }
-                    if (series6.getData().size() > 10) {
-                        series6.getData().remove(0, 1);
-                    }
-                    if (series7.getData().size() > 10) {
-                        series7.getData().remove(0, 1);
-                    }
-                    if (series8.getData().size() > 10) {
-                        series8.getData().remove(0, 1);
-                    }
 
 
+                    if(hc05.getData().get(i)==0x01){
+                        light11.setFill(Color.GREEN);
+                    }
+                    else{
+                        light11.setFill(Color.RED);
+                    }
+                    if(hc05.getData().get(i)==0x01){
+                        light12.setFill(Color.GREEN);
+                    }
+                    else{
+                        light12.setFill(Color.GREEN);
+                    }
+                    velocity.setText(String.valueOf(hc05.getData().get(i)));
+                    angle1.setText(String.valueOf(hc05.getData().get(i)));
+                    angle2.setText(String.valueOf(hc05.getData().get(i)));
                     list.add(String.valueOf(hc05.getData().get(i)+"\t"+String.valueOf(timeSeconds)));
                     ArrayList<Detector> lista = new ArrayList<Detector>();
                     for (String l : list) {

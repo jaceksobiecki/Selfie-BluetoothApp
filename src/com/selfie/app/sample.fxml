@@ -1,38 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.PointLight?>
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="626.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.selfie.app.Controller">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="626.0" prefWidth="1012.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.selfie.app.Controller">
     <children>
-      <AreaChart fx:id="chart" animated="false" createSymbols="false" layoutX="12.0" layoutY="287.0" prefHeight="308.0" prefWidth="707.0" title="Data">
+      <AreaChart fx:id="chart" animated="false" createSymbols="false" layoutX="125.0" layoutY="-13.0" prefHeight="356.0" prefWidth="295.0" rotate="-90.0">
         <xAxis>
-          <CategoryAxis animated="false" endMargin="0.0" label="time[sec]" pickOnBounds="false" side="BOTTOM" startMargin="0.0" fx:id="x" />
+          <CategoryAxis animated="false" endMargin="0.0" pickOnBounds="false" side="BOTTOM" startMargin="0.0" fx:id="x" />
         </xAxis>
         <yAxis>
-          <NumberAxis fx:id="y" animated="false" autoRanging="false" label="data" side="LEFT" upperBound="200.0" />
+          <NumberAxis fx:id="y" animated="false" autoRanging="false" minorTickCount="0" side="LEFT" tickLabelRotation="90.0" tickUnit="100.0" upperBound="2000.0" />
         </yAxis>
       </AreaChart>
-      <Button fx:id="show" layoutX="339.0" layoutY="77.0" mnemonicParsing="false" onAction="#showTestData" prefHeight="27.0" prefWidth="120.0" text="Test Data" />
-      <TableView fx:id="table" layoutX="495.0" layoutY="30.0" prefHeight="281.0" prefWidth="207.0">
+      <Button fx:id="show" layoutX="650.0" layoutY="17.0" mnemonicParsing="false" onAction="#showTestData" prefHeight="27.0" prefWidth="120.0" text="Test Data" />
+      <TableView fx:id="table" layoutX="785.0" layoutY="17.0" prefHeight="281.0" prefWidth="207.0">
         <columns>
           <TableColumn fx:id="valueof" prefWidth="100.0" text="Value" />
           <TableColumn fx:id="timeof" prefWidth="106.0" text="Time" />
         </columns>
       </TableView>
-      <Separator layoutX="134.0" layoutY="57.0" orientation="VERTICAL" prefHeight="200.0" />
-      <Separator layoutX="314.0" layoutY="57.0" orientation="VERTICAL" prefHeight="200.0" />
+      <Separator layoutX="503.0" layoutY="12.0" orientation="VERTICAL" prefHeight="200.0" />
+      <Separator layoutX="618.0" layoutY="17.0" orientation="VERTICAL" prefHeight="200.0" />
       <Button layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#info" prefHeight="27.0" prefWidth="43.0" text="info" />
-      <Button layoutX="181.0" layoutY="77.0" mnemonicParsing="false" onAction="#start" prefHeight="27.0" prefWidth="86.0" text="start1" />
-      <Button layoutX="181.0" layoutY="171.0" mnemonicParsing="false" onAction="#stop" prefHeight="27.0" prefWidth="86.0" text="stop" />
-      <Button layoutX="337.0" layoutY="124.0" mnemonicParsing="false" onAction="#diagON" prefHeight="27.0" prefWidth="120.0" text="Diag on" />
-      <Button layoutX="337.0" layoutY="171.0" mnemonicParsing="false" onAction="#diagOFF" prefHeight="27.0" prefWidth="120.0" text="Diag off" />
+      <Button layoutX="520.0" layoutY="17.0" mnemonicParsing="false" onAction="#start" prefHeight="27.0" prefWidth="86.0" text="start1" />
+      <Button layoutX="520.0" layoutY="57.0" mnemonicParsing="false" onAction="#stop" prefHeight="27.0" prefWidth="86.0" text="stop" />
+      <Button layoutX="650.0" layoutY="57.0" mnemonicParsing="false" onAction="#diagON" prefHeight="27.0" prefWidth="120.0" text="Diag on" />
+      <Button layoutX="650.0" layoutY="98.0" mnemonicParsing="false" onAction="#diagOFF" prefHeight="27.0" prefWidth="120.0" text="Diag off" />
+      <Separator layoutX="27.0" layoutY="515.0" prefHeight="0.0" prefWidth="953.0" />
+      <TextField fx:id="label1" layoutX="51.0" layoutY="582.0" prefHeight="25.0" prefWidth="43.0" />
+      <TextField fx:id="label2" layoutX="111.0" layoutY="582.0" prefHeight="25.0" prefWidth="43.0" />
+      <TextField fx:id="label7" layoutX="396.0" layoutY="582.0" prefHeight="25.0" prefWidth="43.0" />
+      <TextField fx:id="label3" layoutX="171.0" layoutY="582.0" prefHeight="25.0" prefWidth="43.0" />
+      <TextField fx:id="label4" layoutX="229.0" layoutY="582.0" prefHeight="25.0" prefWidth="43.0" />
+      <TextField fx:id="label5" layoutX="286.0" layoutY="582.0" prefHeight="25.0" prefWidth="43.0" />
+      <TextField fx:id="label6" layoutX="341.0" layoutY="582.0" prefHeight="25.0" prefWidth="43.0" />
+      <Label fx:id="velocity2" layoutX="59.0" layoutY="549.0" text="Label" />
+      <Label layoutX="119.0" layoutY="549.0" text="Label" />
+      <Label layoutX="179.0" layoutY="549.0" text="Label" />
+      <Label layoutX="237.0" layoutY="549.0" text="Label" />
+      <Label layoutX="294.0" layoutY="549.0" text="Label" />
+      <Label layoutX="349.0" layoutY="549.0" text="Label" />
+      <Label layoutX="404.0" layoutY="549.0" text="Label" />
+      <Button fx:id="send" layoutX="542.0" layoutY="570.0" mnemonicParsing="false" onAction="#send" text="Send" />
+      <Label layoutX="37.0" layoutY="217.0" text="Velocity" />
+      <Label fx:id="velocity1" layoutX="45.0" layoutY="234.0" text="Label" />
+      <Line endX="100.0" layoutX="360.0" layoutY="406.0" rotate="66.0" startX="-70.0" />
+      <Line endX="100.0" layoutX="150.0" layoutY="406.0" rotate="-66.0" startX="-70.0" />
+      <Label fx:id="angle1" layoutX="133.0" layoutY="346.0" text="Label" />
+      <Label fx:id="angle2" layoutX="382.0" layoutY="346.0" text="Label" />
+      <PointLight fx:id="light1" color="GREEN" focusTraversable="true" layoutX="147.0" layoutY="328.0" scaleX="5.0" scaleY="5.0" scaleZ="5.0">
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor></PointLight>
+      <PointLight fx:id="light2" color="CHARTREUSE" layoutX="396.0" layoutY="328.0" lightOn="true" />
+      <TextField fx:id="label8" layoutX="451.0" layoutY="582.0" prefHeight="25.0" prefWidth="43.0" />
+      <Label layoutX="459.0" layoutY="549.0" text="Label" />
+      <Circle fx:id="light12" fill="RED" layoutX="395.0" layoutY="328.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="light11" fill="RED" layoutX="147.0" layoutY="328.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
 
           </children>
 </AnchorPane>

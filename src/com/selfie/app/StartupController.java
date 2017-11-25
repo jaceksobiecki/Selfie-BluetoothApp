@@ -64,7 +64,7 @@ public class StartupController implements Initializable {
                     connect();
                 else {
 
-                    if (listViewNew.getSelectionModel().getSelectedItem().matches("GUN.*")) {
+                    if (listViewNew.getSelectionModel().getSelectedItem().matches("HC.*")) {
                         hc05.saveUrl();
                         connect();
                     } else {

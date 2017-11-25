@@ -83,7 +83,7 @@ public class HC05 {
         os.write(a);
     }
 
-    public void send(byte[] sData1, byte[] sFlag) throws Exception {
+    public void send(short[] sData1, byte[] sFlag) throws Exception {
         j_bufferS[0] = (byte) ((sFlag[0]) & 0xFF);
         j_bufferS[1] = (byte) ((sData1[0]) & 0xFF);
         j_bufferS[2] = (byte) ((sData1[0] >> 8 | sData1[1] << 3) & 0xFF);
@@ -141,7 +141,7 @@ public class HC05 {
                     String name = btDevice.getFriendlyName(false);
                     devices.add(name + "    " + btDevice.getBluetoothAddress());
                     System.out.format("%s (%s)\n", name, btDevice.getBluetoothAddress());
-                    if (name.matches("GUN.*")) {
+                    if (name.matches("HC.*")) {
                         hc05device = btDevice;
                         System.out.println("got it!");
                     }
