@@ -26,8 +26,8 @@ public class HC05 {
     private int[] j_bufferR = new int[14];
     private byte[] rFlag = new byte[3];
     private byte[] j_bufferS = new byte[14];
-    private static short[] rJData = new short[11];
-    private static short[] rSTMData = new short[11];
+    private short[] rJData = new short[10];
+    private short[] rSTMData = new short[10];
     private static ArrayList<String> devices = new ArrayList<>();
     private static String hc05Url;
     private static String URL;
@@ -62,7 +62,7 @@ public class HC05 {
     }
 
     public short[] getSTMData() {
-        return rJData;
+        return rSTMData;
     }
 
     public void readUrl() throws IOException {
@@ -111,24 +111,24 @@ public class HC05 {
         DataInputStream disReader = new DataInputStream(is);
         int syncByte;
         if (is.available() > 0) {
-            syncByte = disReader.readByte();
-            System.out.println(rFlag[0]);
+            syncByte = disReader.readUnsignedByte();
+            System.out.println(syncByte);
             if (syncByte == 0xFF) {
                 System.out.println("Jatson");
                 for (int i = 0; i < 11; i++) {
                     j_bufferR[i] = disReader.readUnsignedByte();
                 }
-                rJData[1] = ((short) ((j_bufferR[0] | j_bufferR[1] << 8) & 0x7FF));
-                rJData[2] = ((short) ((j_bufferR[1] >> 3 | j_bufferR[2] << 5) & 0x7FF));
-                rJData[3] = ((short) ((j_bufferR[2] >> 6 | j_bufferR[3] << 2 | j_bufferR[4] << 10) & 0x7FF));
-                rJData[4] = ((short) ((j_bufferR[4] >> 1 | j_bufferR[5] << 7) & 0x7FF));
-                rJData[5] = ((short) ((j_bufferR[5] >> 4 | j_bufferR[6] << 4) & 0x7FF));
-                rJData[6] = ((short) ((j_bufferR[6] >> 7 | j_bufferR[7] << 1 | j_bufferR[8] << 9) & 0x7FF));
-                rJData[7] = ((short) ((j_bufferR[8] >> 2 | j_bufferR[9] << 6) & 0x7FF));
-                rJData[8] = ((short) ((j_bufferR[9] >> 5 | j_bufferR[10] << 3) & 0x7FF));
+                rJData[0] = ((short) ((j_bufferR[0] | j_bufferR[1] << 8) & 0x7FF));
+                rJData[1] = ((short) ((j_bufferR[1] >> 3 | j_bufferR[2] << 5) & 0x7FF));
+                rJData[2] = ((short) ((j_bufferR[2] >> 6 | j_bufferR[3] << 2 | j_bufferR[4] << 10) & 0x7FF));
+                rJData[3] = ((short) ((j_bufferR[4] >> 1 | j_bufferR[5] << 7) & 0x7FF));
+                rJData[4] = ((short) ((j_bufferR[5] >> 4 | j_bufferR[6] << 4) & 0x7FF));
+                rJData[5] = ((short) ((j_bufferR[6] >> 7 | j_bufferR[7] << 1 | j_bufferR[8] << 9) & 0x7FF));
+                rJData[6] = ((short) ((j_bufferR[8] >> 2 | j_bufferR[9] << 6) & 0x7FF));
+                rJData[7] = ((short) ((j_bufferR[9] >> 5 | j_bufferR[10] << 3) & 0x7FF));
 
+                rJData[8] = disReader.readByte();
                 rJData[9] = disReader.readByte();
-                rJData[10] = disReader.readByte();
 
                 System.out.println(rJData);
                 syncByte = 0xFD;
@@ -138,17 +138,17 @@ public class HC05 {
                 for (int i = 0; i < 11; i++) {
                     j_bufferR[i] = disReader.readUnsignedByte();
                 }
-                rSTMData[1] = ((short) ((j_bufferR[0] | j_bufferR[1] << 8) & 0x7FF));
-                rSTMData[2] = ((short) ((j_bufferR[1] >> 3 | j_bufferR[2] << 5) & 0x7FF));
-                rSTMData[3] = ((short) ((j_bufferR[2] >> 6 | j_bufferR[3] << 2 | j_bufferR[4] << 10) & 0x7FF));
-                rSTMData[4] = ((short) ((j_bufferR[4] >> 1 | j_bufferR[5] << 7) & 0x7FF));
-                rSTMData[5] = ((short) ((j_bufferR[5] >> 4 | j_bufferR[6] << 4) & 0x7FF));
-                rSTMData[6] = ((short) ((j_bufferR[6] >> 7 | j_bufferR[7] << 1 | j_bufferR[8] << 9) & 0x7FF));
-                rSTMData[7] = ((short) ((j_bufferR[8] >> 2 | j_bufferR[9] << 6) & 0x7FF));
-                rSTMData[8] = ((short) ((j_bufferR[9] >> 5 | j_bufferR[10] << 3) & 0x7FF));
+                rSTMData[0] = ((short) ((j_bufferR[0] | j_bufferR[1] << 8) & 0x7FF));
+                rSTMData[1] = ((short) ((j_bufferR[1] >> 3 | j_bufferR[2] << 5) & 0x7FF));
+                rSTMData[2] = ((short) ((j_bufferR[2] >> 6 | j_bufferR[3] << 2 | j_bufferR[4] << 10) & 0x7FF));
+                rSTMData[3] = ((short) ((j_bufferR[4] >> 1 | j_bufferR[5] << 7) & 0x7FF));
+                rSTMData[4] = ((short) ((j_bufferR[5] >> 4 | j_bufferR[6] << 4) & 0x7FF));
+                rSTMData[5] = ((short) ((j_bufferR[6] >> 7 | j_bufferR[7] << 1 | j_bufferR[8] << 9) & 0x7FF));
+                rSTMData[6] = ((short) ((j_bufferR[8] >> 2 | j_bufferR[9] << 6) & 0x7FF));
+                rSTMData[7] = ((short) ((j_bufferR[9] >> 5 | j_bufferR[10] << 3) & 0x7FF));
 
+                rSTMData[8] = disReader.readByte();
                 rSTMData[9] = disReader.readByte();
-                rSTMData[10] = disReader.readByte();
 
                 System.out.println(rSTMData);
                 syncByte = 0xFD;

@@ -97,22 +97,13 @@ public class Controller implements Initializable {
 
     public void send(){
         HC05send hc05Send = new HC05send();
-        sFlag[0]=0x01;
-        frame[0]=Short.valueOf(label1.getText());
-        frame[1]=Short.valueOf(label2.getText());
-        frame[2]=Short.valueOf(label3.getText());
-        frame[3]=Short.valueOf(label4.getText());
-        frame[4]=Short.valueOf(label5.getText());
-        frame[5]=Short.valueOf(label6.getText());
-        frame[6]=Short.valueOf(label7.getText());
-        frame[7]=Short.valueOf(label8.getText());
-        sFlag[1]=0;
-        sFlag[2]=0x01;
-        try {
-            hc05.receiveData();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        hc05Send.start();
+        series1 = new XYChart.Series();
+        chart.getData().addAll(series1);
+
+        Thread thread=new Thread(new JDataThread());
+        thread.start();
     }
     public void stop(){
         HC05send hc05Send = new HC05send();
@@ -153,33 +144,29 @@ public class Controller implements Initializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
-                JFlags=hc05.getBit(hc05.getJetsonData()[9]);
-                Platform.runLater(() -> {
-                    series2.getData().add(new XYChart.Data(String.valueOf(timeSeconds), 1000));
-                    series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getJetsonData()[1]));
 
+                timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
+                JFlags=hc05.getBit(hc05.getJetsonData()[8]);
+                Platform.runLater(() -> {
+                    series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getJetsonData()[1]));
+                    System.out.println(hc05.getJetsonData()[1]);
                     if (series1.getData().size() > 10) {
                         series1.getData().remove(0, 1);
                     }
-                    if (series2.getData().size() > 10) {
-                        series2.getData().remove(0, 1);
-                    }
 
 
-                    if(STMFlags[0]==0x01){
+                    if(JFlags[0]==0x01){
                         light11.setFill(Color.GREEN);
                     }
                     else{
                         light11.setFill(Color.RED);
                     }
-                    if(STMFlags[1]==0x01){
+                    if(JFlags[1]==0x01){
                         light12.setFill(Color.GREEN);
                     }
                     else{
-                        light12.setFill(Color.GREEN);
+                        light12.setFill(Color.RED);
                     }
-                    velocity.setText(String.valueOf(hc05.getJetsonData()[i]));
                     angle1.setText(String.valueOf(hc05.getJetsonData()[2]));
                     angle2.setText(String.valueOf(hc05.getJetsonData()[3]));
                     list.add(String.valueOf(hc05.getJetsonData()[i]+"\t"+String.valueOf(timeSeconds)));
@@ -190,6 +177,7 @@ public class Controller implements Initializable {
                             lista.add(new Detector(tab[0], tab[1]));
                         }
                     }
+                    /*
                     ObservableList<Detector> dane = FXCollections.observableArrayList(lista);
 
                     valueof.setCellValueFactory(
@@ -200,7 +188,7 @@ public class Controller implements Initializable {
                             new PropertyValueFactory<Detector, String>("time")
                     );
                     table.itemsProperty().setValue(dane);
-
+*/
 
                 });
                 try {
@@ -235,7 +223,7 @@ public class Controller implements Initializable {
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 STMFlags=hc05.getBit(hc05.getJetsonData()[9]);
                 Platform.runLater(() -> {
-
+/*
                     list.add(String.valueOf(hc05.getJetsonData()[i]+"\t"+String.valueOf(timeSeconds)));
                     ArrayList<Detector> lista = new ArrayList<Detector>();
                     for (String l : list) {
@@ -255,7 +243,7 @@ public class Controller implements Initializable {
                     );
                     table.itemsProperty().setValue(dane);
 
-
+*/
                 });
                 try {
                     Thread.sleep(1000);

@@ -16,14 +16,15 @@
 
 <AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="626.0" prefWidth="1012.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.selfie.app.Controller">
     <children>
-      <AreaChart fx:id="chart" animated="false" createSymbols="false" layoutX="125.0" layoutY="-13.0" prefHeight="356.0" prefWidth="295.0" rotate="-90.0">
+      <AreaChart fx:id="chart" animated="false" createSymbols="false" layoutX="125.0" layoutY="-13.0" legendVisible="false" prefHeight="356.0" prefWidth="295.0" rotate="-90.0">
         <xAxis>
-          <CategoryAxis animated="false" endMargin="0.0" pickOnBounds="false" side="BOTTOM" startMargin="0.0" fx:id="x" />
+          <CategoryAxis animated="false" endMargin="0.0" pickOnBounds="false" prefHeight="19.0" prefWidth="241.0" side="BOTTOM" startMargin="0.0" fx:id="x" />
         </xAxis>
         <yAxis>
           <NumberAxis fx:id="y" animated="false" autoRanging="false" minorTickCount="0" side="LEFT" tickLabelRotation="90.0" tickUnit="100.0" upperBound="2000.0" />
         </yAxis>
       </AreaChart>
+      <Line endX="100.0" layoutX="265.0" layoutY="149.0" rotate="-90.0" scaleX="1.225" startX="-100.0" strokeWidth="3.0" />
       <Separator layoutX="500.0" layoutY="41.0" orientation="VERTICAL" prefHeight="478.0" prefWidth="1.0" />
       <Button layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#info" prefHeight="27.0" prefWidth="43.0" text="info" />
       <Separator layoutX="27.0" layoutY="515.0" prefHeight="0.0" prefWidth="953.0" />
