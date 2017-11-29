@@ -166,13 +166,13 @@ public class Controller implements Initializable {
                     }
 
 
-                    if(flags[1]==0x01){
+                    if(flags[0]==0x01){
                         light11.setFill(Color.GREEN);
                     }
                     else{
                         light11.setFill(Color.RED);
                     }
-                    if(flags[2]==0x01){
+                    if(flags[1]==0x01){
                         light12.setFill(Color.GREEN);
                     }
                     else{
