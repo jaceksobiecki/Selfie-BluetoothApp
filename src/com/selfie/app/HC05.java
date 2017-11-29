@@ -23,7 +23,7 @@ public class HC05 {
     private static OutputStream os;
     private static StreamConnection streamConnection;
     private static InputStream is;
-    private short[] j_bufferR = new short[14];
+    private int[] j_bufferR = new int[14];
     private byte[] rFlag = new byte[3];
     private byte[] j_bufferS = new byte[14];
     private static short[] rData = new short[11];
@@ -110,7 +110,7 @@ public class HC05 {
             if (rData[0] == 120) {
                 System.out.println(1);
                     for (int i = 0; i < 11; i++) {
-                        j_bufferR[i] = disReader.readByte();
+                        j_bufferR[i] = disReader.readUnsignedByte();
                     }
                     rData[1]=((short) ((j_bufferR[0] | j_bufferR[1] << 8) & 0x7FF));
                     rData[2]=((short) ((j_bufferR[1] >> 3 | j_bufferR[2] << 5) & 0x7FF));
@@ -216,5 +216,9 @@ public class HC05 {
         PrintWriter printWriter = new PrintWriter("Url.txt");
         printWriter.write(URL);
         printWriter.close();
+    }
+
+    public byte getBit(int position,short data) {
+        return (byte) ((data >> position)&0x01);
     }
 }

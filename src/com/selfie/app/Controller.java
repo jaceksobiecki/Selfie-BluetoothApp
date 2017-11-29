@@ -75,14 +75,14 @@ public class Controller implements Initializable {
     public void start(){
         HC05send hc05Send = new HC05send();
         sFlag[0]=0x01;
-        frame[0]=Short.valueOf(label1.getText());
-        frame[1]=Short.valueOf(label2.getText());
-        frame[2]=Short.valueOf(label3.getText());
-        frame[3]=Short.valueOf(label4.getText());
-        frame[4]=Short.valueOf(label5.getText());
-        frame[5]=Short.valueOf(label6.getText());
-        frame[6]=Short.valueOf(label7.getText());
-        frame[7]=Short.valueOf(label8.getText());
+        frame[0]=12;
+        frame[1]=1200;
+        frame[2]=100;
+        frame[3]=50;
+        frame[4]=40;
+        frame[5]=200;
+        frame[6]=11;
+        frame[7]=5;
         sFlag[1]=0;
         sFlag[2]=0x01;
         hc05Send.start();
@@ -94,6 +94,7 @@ public class Controller implements Initializable {
     }
 
     public void send(){
+        HC05send hc05Send = new HC05send();
         sFlag[0]=0x01;
         frame[0]=Short.valueOf(label1.getText());
         frame[1]=Short.valueOf(label2.getText());
@@ -105,6 +106,11 @@ public class Controller implements Initializable {
         frame[7]=Short.valueOf(label8.getText());
         sFlag[1]=0;
         sFlag[2]=0x01;
+        try {
+            hc05.receiveData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public void stop(){
         HC05send hc05Send = new HC05send();
@@ -149,7 +155,7 @@ public class Controller implements Initializable {
 
                 Platform.runLater(() -> {
                     series2.getData().add(new XYChart.Data(String.valueOf(timeSeconds), 1000));
-                    series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData()[i]));
+                    series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData()[1]));
 
                     if (series1.getData().size() > 10) {
                         series1.getData().remove(0, 1);
@@ -159,21 +165,21 @@ public class Controller implements Initializable {
                     }
 
 
-                    if(hc05.getData()[i]==0x01){
+                    if(hc05.getBit(7,hc05.getData()[9])==0x01){
                         light11.setFill(Color.GREEN);
                     }
                     else{
                         light11.setFill(Color.RED);
                     }
-                    if(hc05.getData()[i]==0x01){
+                    if(hc05.getBit(6,hc05.getData()[9])==0x01){
                         light12.setFill(Color.GREEN);
                     }
                     else{
                         light12.setFill(Color.GREEN);
                     }
                     velocity.setText(String.valueOf(hc05.getData()[i]));
-                    angle1.setText(String.valueOf(hc05.getData()[i]));
-                    angle2.setText(String.valueOf(hc05.getData()[i]));
+                    angle1.setText(String.valueOf(hc05.getData()[2]));
+                    angle2.setText(String.valueOf(hc05.getData()[3]));
                     list.add(String.valueOf(hc05.getData()[i]+"\t"+String.valueOf(timeSeconds)));
                     ArrayList<Detector> lista = new ArrayList<Detector>();
                     for (String l : list) {
