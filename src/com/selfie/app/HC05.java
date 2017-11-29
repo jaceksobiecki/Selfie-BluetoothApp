@@ -218,7 +218,13 @@ public class HC05 {
         printWriter.close();
     }
 
-    public byte getBit(int position,short data) {
-        return (byte) ((data >> position)&0x01);
+    public int[] getBit(short data) {
+        int[] tab=new int[8];
+        int j=7;
+        for(int i=0; i<8;i++){
+            tab[i]=(byte) ((data >> j)&0x01);
+            j=j-1;
+        }
+       return tab;
     }
 }

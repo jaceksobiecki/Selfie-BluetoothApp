@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class Controller implements Initializable {
     private short[] frame =new short[8];
     private byte[] sFlag = new byte[3];
+    private int[] flags = new int [8];
     private boolean isRunning=false;
     Receive receive = new Receive();
     @FXML
@@ -152,7 +153,7 @@ public class Controller implements Initializable {
                     e.printStackTrace();
                 }
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
-
+                flags=hc05.getBit(hc05.getData()[9]);
                 Platform.runLater(() -> {
                     series2.getData().add(new XYChart.Data(String.valueOf(timeSeconds), 1000));
                     series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData()[1]));
@@ -165,13 +166,13 @@ public class Controller implements Initializable {
                     }
 
 
-                    if(hc05.getBit(7,hc05.getData()[9])==0x01){
+                    if(flags[1]==0x01){
                         light11.setFill(Color.GREEN);
                     }
                     else{
                         light11.setFill(Color.RED);
                     }
-                    if(hc05.getBit(6,hc05.getData()[9])==0x01){
+                    if(flags[2]==0x01){
                         light12.setFill(Color.GREEN);
                     }
                     else{
