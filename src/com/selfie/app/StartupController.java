@@ -63,18 +63,8 @@ public class StartupController implements Initializable {
                 if (listViewNew.getSelectionModel().isEmpty())
                     connect();
                 else {
-
-                    if (listViewNew.getSelectionModel().getSelectedItem().matches("HC.*")) {
-                        hc05.saveUrl();
-                        connect();
-                    } else {
-                        info = "Unsupported device";
-                        try {
-                            popupWindow();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    hc05.saveUrl();
+                    connect();
                 }
             } else
                 connect();
@@ -88,17 +78,8 @@ public class StartupController implements Initializable {
                     e.printStackTrace();
                 }
             } else {
-                if (listViewNew.getSelectionModel().getSelectedItem().matches("HC.*")) {
-                    hc05.saveUrl();
-                    connect();
-                } else {
-                    info = "Unsupported device";
-                    try {
-                        popupWindow();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                hc05.saveUrl();
+                connect();
             }
         }
     }

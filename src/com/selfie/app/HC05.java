@@ -5,35 +5,34 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Connects to HC-05 bluetooth module
+ *
+ * Recieved data is saved in rData:
+ * rData[0] -> syncByte=0xFF
+ * rData[1] -> odchyłka względem trasy
+ * rData[2] -> kąt nachylenia lewej linii
+ * rData[3] -> kąt nachylenia prawej linii
+ * rData[4] -> odległość od obietu wykrytego przez flagi
+ * rData[5]-rData[8] -> 0
+ * rData[9] -> flagi
+ * rData[10] -> endByte=0xFF
  */
 public class HC05 {
     private static OutputStream os;
     private static StreamConnection streamConnection;
     private static InputStream is;
-    private static int i = 0;
     private short[] j_bufferR = new short[14];
     private byte[] rFlag = new byte[3];
     private byte[] j_bufferS = new byte[14];
-    private static ArrayList<Short> rData = new ArrayList<>();
+    private static short[] rData = new short[11];
     private static ArrayList<String> devices = new ArrayList<>();
     private static String hc05Url;
     private static String URL;
     boolean scanFinished = false;
-    int syncByte;
-    //set your hc05Url
 
-    //Bt Piotrek
-    //private static String hc05Url = "btspp://201611226383:1;authenticate=false;encrypt=false;master=false";
-    //bt Jacek
-    //private static String hc05Url = "btspp://301412260760:1;authenticate=false;encrypt=false;master=false";
-    //Bt Team 1
-    //private static String hc05Url = "btspp://98D33380730A:1;authenticate=false;encrypt=false;master=false";
     RemoteDevice hc05device;
-    char[] bytes = new char[32];
 
     public static String getURL() {
         return URL;
@@ -57,7 +56,7 @@ public class HC05 {
         return devices;
     }
 
-    public ArrayList<Short> getData() {
+    public short[] getData() {
         return rData;
     }
 
@@ -70,6 +69,7 @@ public class HC05 {
         System.out.println("Connecting");
         try {
             streamConnection = (StreamConnection) Connector.open(URL);
+
             os = streamConnection.openOutputStream();
             is = streamConnection.openInputStream();
             System.out.println("Connected to " + URL);
@@ -103,27 +103,26 @@ public class HC05 {
     }
 
     public void receiveData() throws IOException {
-        rData.clear();
         DataInputStream disReader = new DataInputStream(is);
         if (is.available() > 0) {
-            rFlag[0] = disReader.readByte();
+            rData[0] = disReader.readByte();
             System.out.println(rFlag[0]);
-            if (rFlag[0] == 120) {
+            if (rData[0] == 120) {
                 System.out.println(1);
                     for (int i = 0; i < 11; i++) {
                         j_bufferR[i] = disReader.readByte();
                     }
-                    rData.add((short) ((j_bufferR[0] | j_bufferR[1] << 8) & 0x7FF));
-                    rData.add((short) ((j_bufferR[1] >> 3 | j_bufferR[2] << 5) & 0x7FF));
-                    rData.add((short) ((j_bufferR[2] >> 6 | j_bufferR[3] << 2 | j_bufferR[4] << 10) & 0x7FF));
-                    rData.add((short) ((j_bufferR[4] >> 1 | j_bufferR[5] << 7) & 0x7FF));
-                    rData.add((short) ((j_bufferR[5] >> 4 | j_bufferR[6] << 4) & 0x7FF));
-                    rData.add((short) ((j_bufferR[6] >> 7 | j_bufferR[7] << 1 | j_bufferR[8] << 9) & 0x7FF));
-                    rData.add((short) ((j_bufferR[8] >> 2 | j_bufferR[9] << 6) & 0x7FF));
-                    rData.add((short) ((j_bufferR[9] >> 5 | j_bufferR[10] << 3) & 0x7FF));
+                    rData[1]=((short) ((j_bufferR[0] | j_bufferR[1] << 8) & 0x7FF));
+                    rData[2]=((short) ((j_bufferR[1] >> 3 | j_bufferR[2] << 5) & 0x7FF));
+                    rData[3]=((short) ((j_bufferR[2] >> 6 | j_bufferR[3] << 2 | j_bufferR[4] << 10) & 0x7FF));
+                    rData[4]=((short) ((j_bufferR[4] >> 1 | j_bufferR[5] << 7) & 0x7FF));
+                    rData[5]=((short) ((j_bufferR[5] >> 4 | j_bufferR[6] << 4) & 0x7FF));
+                    rData[6]=((short) ((j_bufferR[6] >> 7 | j_bufferR[7] << 1 | j_bufferR[8] << 9) & 0x7FF));
+                    rData[7]=((short) ((j_bufferR[8] >> 2 | j_bufferR[9] << 6) & 0x7FF));
+                    rData[8]=((short) ((j_bufferR[9] >> 5 | j_bufferR[10] << 3) & 0x7FF));
 
-                    rFlag[1] = disReader.readByte();
-                    rFlag[2] = disReader.readByte();
+                    rData[9] = disReader.readByte();
+                    rData[10] = disReader.readByte();
 
                     System.out.println(rData);
             }

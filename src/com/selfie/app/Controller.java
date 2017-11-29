@@ -129,19 +129,6 @@ public class Controller implements Initializable {
 
     }
 
-
-    //Test
-    @FXML
-    public void showTestData() {
-
-        series1 = new XYChart.Series();
-        chart.getData().addAll(series1);
-
-        Thread thread2 = new Thread(new TestDataThread());
-        thread2.start();
-    }
-
-
     public class DataThread implements Runnable {
         long time = 0;
         long timeSeconds;
@@ -162,7 +149,7 @@ public class Controller implements Initializable {
 
                 Platform.runLater(() -> {
                     series2.getData().add(new XYChart.Data(String.valueOf(timeSeconds), 1000));
-                    series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
+                    series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData()[i]));
 
                     if (series1.getData().size() > 10) {
                         series1.getData().remove(0, 1);
@@ -172,22 +159,22 @@ public class Controller implements Initializable {
                     }
 
 
-                    if(hc05.getData().get(i)==0x01){
+                    if(hc05.getData()[i]==0x01){
                         light11.setFill(Color.GREEN);
                     }
                     else{
                         light11.setFill(Color.RED);
                     }
-                    if(hc05.getData().get(i)==0x01){
+                    if(hc05.getData()[i]==0x01){
                         light12.setFill(Color.GREEN);
                     }
                     else{
                         light12.setFill(Color.GREEN);
                     }
-                    velocity.setText(String.valueOf(hc05.getData().get(i)));
-                    angle1.setText(String.valueOf(hc05.getData().get(i)));
-                    angle2.setText(String.valueOf(hc05.getData().get(i)));
-                    list.add(String.valueOf(hc05.getData().get(i)+"\t"+String.valueOf(timeSeconds)));
+                    velocity.setText(String.valueOf(hc05.getData()[i]));
+                    angle1.setText(String.valueOf(hc05.getData()[i]));
+                    angle2.setText(String.valueOf(hc05.getData()[i]));
+                    list.add(String.valueOf(hc05.getData()[i]+"\t"+String.valueOf(timeSeconds)));
                     ArrayList<Detector> lista = new ArrayList<Detector>();
                     for (String l : list) {
                         String[] tab = l.split("\t");
@@ -215,67 +202,11 @@ public class Controller implements Initializable {
                 }
                 endingTime = System.currentTimeMillis();
                 time += endingTime - currentTime;
-            }
-        }
-    }
 
-    //Test
-    public class TestDataThread implements Runnable {
-        long time = 0;
-        long timeSeconds;
-        int i = 0;
-
-        @Override
-        public void run() {
-
-            long currentTime;
-            long endingTime;
-
-            while (true) {
-                currentTime = System.currentTimeMillis();
-              //  hc05.drawTestData();
-                timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
-                Platform.runLater(() -> {
-                    series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData().get(i)));
-                    if (series1.getData().size() > 10) {
-                        series1.getData().remove(0, 1);
-                    }
-
-                    list.add(String.valueOf(hc05.getData().get(i)+"\t"+String.valueOf(timeSeconds)));
-                    ArrayList<Detector> lista = new ArrayList<Detector>();
-                    for (String l : list) {
-                        String[] tab = l.split("\t");
-                        if (tab.length > 1) {
-                            lista.add(new Detector(tab[0], tab[1]));
-                        }
-                    }
-                    ObservableList<Detector> dane = FXCollections.observableArrayList(lista);
-
-                    valueof.setCellValueFactory(
-                            new PropertyValueFactory<Detector, String>("value")
-                    );
-
-                    timeof.setCellValueFactory(
-                            new PropertyValueFactory<Detector, String>("time")
-                    );
-                    table.itemsProperty().setValue(dane);
-                    i++;
-                    System.out.println(time);
-                });
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                endingTime = System.currentTimeMillis();
-
-                time += endingTime - currentTime;
 
             }
         }
     }
-
-
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

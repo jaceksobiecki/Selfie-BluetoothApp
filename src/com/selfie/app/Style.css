@@ -4,3 +4,13 @@
 .button{
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
+
+.rectFont{
+    -fx-background-color: indianred;
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-font-family: helvetica;
+    -fx-alignment: center;
+    -fx-border-color: black;
+    -fx-border-width: 3px;
+}
