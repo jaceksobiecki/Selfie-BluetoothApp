@@ -22,7 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class Controller implements Initializable {
     private short[] frame =new short[8];
     private byte[] sFlag = new byte[3];
-    private int[] flags = new int [8];
+    private int[] JFlags = new int [8];
+    private int[] STMFlags = new int [8];
     private boolean isRunning=false;
     Receive receive = new Receive();
     @FXML
@@ -136,7 +137,7 @@ public class Controller implements Initializable {
 
     }
 
-    public class DataThread implements Runnable {
+    public class JDataThread implements Runnable {
         long time = 0;
         long timeSeconds;
         int i =0;
@@ -153,10 +154,10 @@ public class Controller implements Initializable {
                     e.printStackTrace();
                 }
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
-                flags=hc05.getBit(hc05.getData()[9]);
+                JFlags=hc05.getBit(hc05.getJetsonData()[9]);
                 Platform.runLater(() -> {
                     series2.getData().add(new XYChart.Data(String.valueOf(timeSeconds), 1000));
-                    series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getData()[1]));
+                    series1.getData().add(new XYChart.Data(String.valueOf(timeSeconds), hc05.getJetsonData()[1]));
 
                     if (series1.getData().size() > 10) {
                         series1.getData().remove(0, 1);
@@ -166,22 +167,22 @@ public class Controller implements Initializable {
                     }
 
 
-                    if(flags[0]==0x01){
+                    if(STMFlags[0]==0x01){
                         light11.setFill(Color.GREEN);
                     }
                     else{
                         light11.setFill(Color.RED);
                     }
-                    if(flags[1]==0x01){
+                    if(STMFlags[1]==0x01){
                         light12.setFill(Color.GREEN);
                     }
                     else{
                         light12.setFill(Color.GREEN);
                     }
-                    velocity.setText(String.valueOf(hc05.getData()[i]));
-                    angle1.setText(String.valueOf(hc05.getData()[2]));
-                    angle2.setText(String.valueOf(hc05.getData()[3]));
-                    list.add(String.valueOf(hc05.getData()[i]+"\t"+String.valueOf(timeSeconds)));
+                    velocity.setText(String.valueOf(hc05.getJetsonData()[i]));
+                    angle1.setText(String.valueOf(hc05.getJetsonData()[2]));
+                    angle2.setText(String.valueOf(hc05.getJetsonData()[3]));
+                    list.add(String.valueOf(hc05.getJetsonData()[i]+"\t"+String.valueOf(timeSeconds)));
                     ArrayList<Detector> lista = new ArrayList<Detector>();
                     for (String l : list) {
                         String[] tab = l.split("\t");
@@ -215,6 +216,59 @@ public class Controller implements Initializable {
         }
     }
 
+    public class STMDataThread implements Runnable {
+        long time = 0;
+        long timeSeconds;
+        int i =0;
+
+        @Override
+        public void run() {
+            long currentTime;
+            long endingTime;
+            while (true) {
+                currentTime = System.currentTimeMillis();
+                try {
+                    hc05.receiveData();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
+                STMFlags=hc05.getBit(hc05.getJetsonData()[9]);
+                Platform.runLater(() -> {
+
+                    list.add(String.valueOf(hc05.getJetsonData()[i]+"\t"+String.valueOf(timeSeconds)));
+                    ArrayList<Detector> lista = new ArrayList<Detector>();
+                    for (String l : list) {
+                        String[] tab = l.split("\t");
+                        if (tab.length > 1) {
+                            lista.add(new Detector(tab[0], tab[1]));
+                        }
+                    }
+                    ObservableList<Detector> dane = FXCollections.observableArrayList(lista);
+
+                    valueof.setCellValueFactory(
+                            new PropertyValueFactory<Detector, String>("value")
+                    );
+
+                    timeof.setCellValueFactory(
+                            new PropertyValueFactory<Detector, String>("time")
+                    );
+                    table.itemsProperty().setValue(dane);
+
+
+                });
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                endingTime = System.currentTimeMillis();
+                time += endingTime - currentTime;
+
+
+            }
+        }
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         receive.start();

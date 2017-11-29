@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Connects to HC-05 bluetooth module
- *
+ * <p>
  * Recieved data is saved in rData:
  * rData[0] -> syncByte=0xFF
  * rData[1] -> odchyłka względem trasy
@@ -26,7 +26,8 @@ public class HC05 {
     private int[] j_bufferR = new int[14];
     private byte[] rFlag = new byte[3];
     private byte[] j_bufferS = new byte[14];
-    private static short[] rData = new short[11];
+    private static short[] rJData = new short[11];
+    private static short[] rSTMData = new short[11];
     private static ArrayList<String> devices = new ArrayList<>();
     private static String hc05Url;
     private static String URL;
@@ -56,8 +57,12 @@ public class HC05 {
         return devices;
     }
 
-    public short[] getData() {
-        return rData;
+    public short[] getJetsonData() {
+        return rJData;
+    }
+
+    public short[] getSTMData() {
+        return rJData;
     }
 
     public void readUrl() throws IOException {
@@ -104,27 +109,49 @@ public class HC05 {
 
     public void receiveData() throws IOException {
         DataInputStream disReader = new DataInputStream(is);
+        int syncByte;
         if (is.available() > 0) {
-            rData[0] = disReader.readByte();
+            syncByte = disReader.readByte();
             System.out.println(rFlag[0]);
-            if (rData[0] == 120) {
-                System.out.println(1);
-                    for (int i = 0; i < 11; i++) {
-                        j_bufferR[i] = disReader.readUnsignedByte();
-                    }
-                    rData[1]=((short) ((j_bufferR[0] | j_bufferR[1] << 8) & 0x7FF));
-                    rData[2]=((short) ((j_bufferR[1] >> 3 | j_bufferR[2] << 5) & 0x7FF));
-                    rData[3]=((short) ((j_bufferR[2] >> 6 | j_bufferR[3] << 2 | j_bufferR[4] << 10) & 0x7FF));
-                    rData[4]=((short) ((j_bufferR[4] >> 1 | j_bufferR[5] << 7) & 0x7FF));
-                    rData[5]=((short) ((j_bufferR[5] >> 4 | j_bufferR[6] << 4) & 0x7FF));
-                    rData[6]=((short) ((j_bufferR[6] >> 7 | j_bufferR[7] << 1 | j_bufferR[8] << 9) & 0x7FF));
-                    rData[7]=((short) ((j_bufferR[8] >> 2 | j_bufferR[9] << 6) & 0x7FF));
-                    rData[8]=((short) ((j_bufferR[9] >> 5 | j_bufferR[10] << 3) & 0x7FF));
+            if (syncByte == 0xFF) {
+                System.out.println("Jatson");
+                for (int i = 0; i < 11; i++) {
+                    j_bufferR[i] = disReader.readUnsignedByte();
+                }
+                rJData[1] = ((short) ((j_bufferR[0] | j_bufferR[1] << 8) & 0x7FF));
+                rJData[2] = ((short) ((j_bufferR[1] >> 3 | j_bufferR[2] << 5) & 0x7FF));
+                rJData[3] = ((short) ((j_bufferR[2] >> 6 | j_bufferR[3] << 2 | j_bufferR[4] << 10) & 0x7FF));
+                rJData[4] = ((short) ((j_bufferR[4] >> 1 | j_bufferR[5] << 7) & 0x7FF));
+                rJData[5] = ((short) ((j_bufferR[5] >> 4 | j_bufferR[6] << 4) & 0x7FF));
+                rJData[6] = ((short) ((j_bufferR[6] >> 7 | j_bufferR[7] << 1 | j_bufferR[8] << 9) & 0x7FF));
+                rJData[7] = ((short) ((j_bufferR[8] >> 2 | j_bufferR[9] << 6) & 0x7FF));
+                rJData[8] = ((short) ((j_bufferR[9] >> 5 | j_bufferR[10] << 3) & 0x7FF));
 
-                    rData[9] = disReader.readByte();
-                    rData[10] = disReader.readByte();
+                rJData[9] = disReader.readByte();
+                rJData[10] = disReader.readByte();
 
-                    System.out.println(rData);
+                System.out.println(rJData);
+                syncByte = 0xFD;
+            }
+            if (syncByte == 0xFE) {
+                System.out.println("STM");
+                for (int i = 0; i < 11; i++) {
+                    j_bufferR[i] = disReader.readUnsignedByte();
+                }
+                rSTMData[1] = ((short) ((j_bufferR[0] | j_bufferR[1] << 8) & 0x7FF));
+                rSTMData[2] = ((short) ((j_bufferR[1] >> 3 | j_bufferR[2] << 5) & 0x7FF));
+                rSTMData[3] = ((short) ((j_bufferR[2] >> 6 | j_bufferR[3] << 2 | j_bufferR[4] << 10) & 0x7FF));
+                rSTMData[4] = ((short) ((j_bufferR[4] >> 1 | j_bufferR[5] << 7) & 0x7FF));
+                rSTMData[5] = ((short) ((j_bufferR[5] >> 4 | j_bufferR[6] << 4) & 0x7FF));
+                rSTMData[6] = ((short) ((j_bufferR[6] >> 7 | j_bufferR[7] << 1 | j_bufferR[8] << 9) & 0x7FF));
+                rSTMData[7] = ((short) ((j_bufferR[8] >> 2 | j_bufferR[9] << 6) & 0x7FF));
+                rSTMData[8] = ((short) ((j_bufferR[9] >> 5 | j_bufferR[10] << 3) & 0x7FF));
+
+                rSTMData[9] = disReader.readByte();
+                rSTMData[10] = disReader.readByte();
+
+                System.out.println(rSTMData);
+                syncByte = 0xFD;
             }
         }
     }
@@ -219,12 +246,12 @@ public class HC05 {
     }
 
     public int[] getBit(short data) {
-        int[] tab=new int[8];
-        int j=7;
-        for(int i=0; i<8;i++){
-            tab[i]=(byte) ((data >> j)&0x01);
-            j=j-1;
+        int[] tab = new int[8];
+        int j = 7;
+        for (int i = 0; i < 8; i++) {
+            tab[i] = (byte) ((data >> j) & 0x01);
+            j = j - 1;
         }
-       return tab;
+        return tab;
     }
 }
