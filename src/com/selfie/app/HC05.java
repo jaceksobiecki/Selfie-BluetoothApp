@@ -73,7 +73,10 @@ public class HC05 {
     public void go() {
         System.out.println("Connecting");
         try {
-            streamConnection = (StreamConnection) Connector.open(URL);
+            //streamConnection = (StreamConnection) Connector.open(URL);
+
+            //należy ustawić port com na którym znajduje się urządzenie
+            streamConnection = (StreamConnection) Connector.open("comm:com0;baudrate=115200;bitsperchar=8;stopbits=2;parity=even");
 
             os = streamConnection.openOutputStream();
             is = streamConnection.openInputStream();

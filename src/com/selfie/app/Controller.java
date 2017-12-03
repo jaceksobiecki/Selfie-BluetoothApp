@@ -200,6 +200,9 @@ public class Controller implements Initializable {
                 time += endingTime - currentTime;
 
 
+
+
+
             }
         }
     }
