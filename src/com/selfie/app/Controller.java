@@ -62,6 +62,27 @@ public class Controller implements Initializable {
     private TableColumn<Detector, String> timeof;
     @FXML
     private TableColumn<Detector, String> valueof;
+
+    @FXML
+    private Label servoLbl;
+    @FXML
+    private Label sharp1;
+    @FXML
+    private Label sharp2;
+    @FXML
+    private Label sharp3;
+    @FXML
+    private Label sharp4;
+    @FXML
+    private Label sharp5;
+    @FXML
+    private Label mapSpot;
+    @FXML
+    private Label instruction;
+    @FXML
+    private Label distanceObj;
+    @FXML
+    private Label batteryLbl;
     /////////////////////////////////////////
 
     @FXML
@@ -190,6 +211,35 @@ public class Controller implements Initializable {
                     table.itemsProperty().setValue(dane);
 */
 
+                    //map spot
+                    if(JFlags[2]==0 && JFlags[3]==0){
+                        mapSpot.setText("Droga wolna");
+                    } else if(JFlags[2]==0 && JFlags[3]==1){
+                        mapSpot.setText("Początek skrzyżowania");
+                    } else if(JFlags[2]==1 && JFlags[3]==0){
+                        mapSpot.setText("Początek parkingu");
+                    } else if(JFlags[2]==1 && JFlags[3]==1){
+                        mapSpot.setText("Początek przejścia");
+                    } else{
+                        mapSpot.setText("błąd flag");
+                    }
+                    //instruction
+                    if(JFlags[2]==0 && JFlags[3]==1){
+                        if(JFlags[4]==0 && JFlags[5]==0){
+                            instruction.setText("STOP");
+                        } else if(JFlags[4]==0 && JFlags[5]==1){
+                            instruction.setText("Reguła prawej");
+                        } else if(JFlags[4]==1 && JFlags[5]==0){
+                            instruction.setText("Ustąp pierwszeństwa");
+                        } else if(JFlags[4]==1 && JFlags[5]==1){
+                            instruction.setText("Pierwszeństwo");
+                        } else{
+                            instruction.setText("błąd flag");
+                        }
+                    }
+                    //distance from map spot
+                    distanceObj.setText(String.valueOf(hc05.getJetsonData()[3]));
+
                 });
                 try {
                     Thread.sleep(1000);
@@ -226,6 +276,17 @@ public class Controller implements Initializable {
                 timeSeconds = TimeUnit.MILLISECONDS.toSeconds(time);
                 STMFlags=hc05.getBit(hc05.getJetsonData()[9]);
                 Platform.runLater(() -> {
+                    //servo
+                    servoLbl.setText(String.valueOf(hc05.getSTMData()[1]));
+                    //sharps
+                    sharp1.setText(String.valueOf(hc05.getSTMData()[3]));
+                    sharp2.setText(String.valueOf(hc05.getSTMData()[4]));
+                    sharp3.setText(String.valueOf(hc05.getSTMData()[5]));
+                    sharp4.setText(String.valueOf(hc05.getSTMData()[6]));
+                    sharp5.setText(String.valueOf(hc05.getSTMData()[7]));
+                    //battery
+                    batteryLbl.setText(String.valueOf(hc05.getSTMData()[2]));
+
 /*
                     list.add(String.valueOf(hc05.getJetsonData()[i]+"\t"+String.valueOf(timeSeconds)));
                     ArrayList<Detector> lista = new ArrayList<Detector>();

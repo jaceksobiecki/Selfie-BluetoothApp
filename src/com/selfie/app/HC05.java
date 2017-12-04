@@ -117,7 +117,7 @@ public class HC05 {
             syncByte = disReader.readUnsignedByte();
             System.out.println(syncByte);
             if (syncByte == 0xFF) {
-                System.out.println("Jatson");
+                System.out.println("Jetson");
                 for (int i = 0; i < 11; i++) {
                     j_bufferR[i] = disReader.readUnsignedByte();
                 }

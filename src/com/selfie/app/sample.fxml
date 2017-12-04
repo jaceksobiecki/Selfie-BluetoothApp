@@ -69,8 +69,9 @@
       <Label fx:id="sharp4" layoutX="810.0" layoutY="429.0" text="D4" />
       <Label fx:id="sharp5" layoutX="737.0" layoutY="438.0" text="D5" />
       <Label fx:id="distanceObj" layoutX="682.0" layoutY="226.0" text="Distance from object" />
-      <Label fx:id="object" layoutX="703.0" layoutY="183.0" prefHeight="34.0" prefWidth="83.0" styleClass="rectFont" text="Crossroad" />
+      <Label fx:id="mapSpot" layoutX="703.0" layoutY="183.0" prefHeight="34.0" prefWidth="83.0" styleClass="rectFont" text="Crossroad" />
       <Label fx:id="instruction" layoutX="698.0" layoutY="116.0" prefHeight="34.0" prefWidth="95.0" styleClass="rectFont" stylesheets="@Style.css" text="Instruction" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="batteryLbl" layoutX="911.0" layoutY="22.0" text="Battery status" />
 
           </children>
 </AnchorPane>
